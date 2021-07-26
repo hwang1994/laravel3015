@@ -223,19 +223,40 @@ class ProfileController extends Controller
         if ($user!==null) {
             $pins = Pin::all();
             //$pins = Pin::all()->where('created_at', '>', Carbon::now()->subHours(1)->toDateTimeString())->where('user_id',$id);
-            foreach ($pins as $pin) {
-                if ($pin['user_id'] == $user->getAttribute('id')) {
-                    $pin['title'] = $pin->item->title;
-                    $pin['name'] = $pin->item->user->name;
-                    $pin['description'] = $pin->item->description;
-                    $pin['price'] = $pin->item->price;
-                    $pin['email'] = $pin->item->user->email;
-                    $pin['picture'] = $pin->item->picture;
-                    $pin['id'] = $pin->item_id;
-                    $pinnedItemByUser[]=$pin;
+            if ($request->input('term') && trim($request->input('term'))!='') {
+                $request->validate([
+                    'term'  => ['not_regex:/(?=.*[<>|])/']
+                ]);
+                $term = $request->input('term');
+                foreach ($pins as $pin) {
+                    if (preg_match('/'.$term.'/i', $pin->item->title) || preg_match('/'.$term.'/i', $pin->item->user->name) || preg_match('/'.$term.'/i', $pin->item->description) || preg_match('/'.$term.'/i', $pin->item->price) ) {
+                        if ($pin['user_id'] == $user->getAttribute('id')) {
+                            $pin['title'] = $pin->item->title;
+                            $pin['name'] = $pin->item->user->name;
+                            $pin['description'] = $pin->item->description;
+                            $pin['price'] = $pin->item->price;
+                            $pin['email'] = $pin->item->user->email;
+                            $pin['picture'] = $pin->item->picture;
+                            $pin['id'] = $pin->item_id;
+                            $pinnedItemByUser[]=$pin;
+                        }
+                    }
                 }
             }
-            
+            else {
+                foreach ($pins as $pin) {
+                    if ($pin['user_id'] == $user->getAttribute('id')) {
+                        $pin['title'] = $pin->item->title;
+                        $pin['name'] = $pin->item->user->name;
+                        $pin['description'] = $pin->item->description;
+                        $pin['price'] = $pin->item->price;
+                        $pin['email'] = $pin->item->user->email;
+                        $pin['picture'] = $pin->item->picture;
+                        $pin['id'] = $pin->item_id;
+                        $pinnedItemByUser[]=$pin;
+                    }
+                }
+            }           
         }
         return response()->json($pinnedItemByUser);
     }
@@ -256,15 +277,14 @@ class ProfileController extends Controller
             }
         }
 
-        // if (count($recentlyViewedItems)>1) {
-        //     $sorted = collect($recentlyViewedItems)->sortBy('name')->sortBy('price')->all();
-        //     return response()->json($sorted);
-        // }
+        if (count($recentlyViewedItems)>1) {
+            usort($recentlyViewedItems, array($this, "cmp"));
+        }
 
         return response()->json($recentlyViewedItems);
     }
 
-    private function cmp($a, $b)
+    public function cmp($a, $b)
     {
         if ($a['name']==$b['name'] && $a['price']==$b['price']) {
             return 0;
@@ -277,6 +297,7 @@ class ProfileController extends Controller
         }
         else {
             return strcmp($a['name'], $b['name']);
+            //return strcmp($b['name'], $a['name']);
         }
     }
 }

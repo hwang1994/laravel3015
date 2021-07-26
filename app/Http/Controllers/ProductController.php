@@ -51,6 +51,5 @@ class ProductController extends Controller
             }
         }
         return response()->json($item);
-        //return response()->json(['item' => $item]);
     }
 }

@@ -59,20 +59,18 @@ class Items extends Component {
 
     if (window.location.search.includes("term=")) {
       this.setState({ 
-        searchText: window.location.search.substr(6),
-      }, () => {
-        this.getAllItems();
+        searchText: window.location.search.substr(6)
       });
     }
-    else {
-      this.getAllItems();
-    }
+
+    this.getAllItems();
 
     //console.log('END didMount');
   }
 
   componentDidUpdate(prevState) {
-    if (this.props.email!==this.state.email || prevState.loggedIn!==this.props.loggedIn) {
+    //console.log('Item Component did Update!');
+    if (this.props.email!==this.state.email || this.props.loggedIn != this.state.loggedIn) {
       this.setState({ 
         email: this.props.email,
         loggedIn: this.props.loggedIn
@@ -85,6 +83,11 @@ class Items extends Component {
         itemAdded : this.props.itemAdded
       })
       this.getAllUnpinnedItems();
+    }
+    if (prevState.loggedIn!==this.props.loggedIn) {
+      this.setState({ 
+        loggedIn: this.props.loggedIn
+      })
     }
     console.log(this.state)
   }
@@ -206,7 +209,9 @@ class Items extends Component {
 
   handleSubmit(e) {
     //console.log('submitted')
-    this.componentDidMount();
+    //this.componentDidMount();
+    this.getAllPinnedItems();
+    this.getAllUnpinnedItems();
   }
 
   downvoteItem(id) {

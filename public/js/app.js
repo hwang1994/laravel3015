@@ -5778,18 +5778,17 @@ var Items = /*#__PURE__*/function (_Component) {
       if (window.location.search.includes("term=")) {
         this.setState({
           searchText: window.location.search.substr(6)
-        }, function () {
-          _this2.getAllItems();
         });
-      } else {
-        this.getAllItems();
-      } //console.log('END didMount');
+      }
 
+      this.getAllItems(); //console.log('END didMount');
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevState) {
-      if (this.props.email !== this.state.email || prevState.loggedIn !== this.props.loggedIn) {
+      console.log('Item Component did Update!');
+
+      if (this.props.email !== this.state.email || this.props.loggedIn != this.state.loggedIn) {
         this.setState({
           email: this.props.email,
           loggedIn: this.props.loggedIn
@@ -5803,6 +5802,12 @@ var Items = /*#__PURE__*/function (_Component) {
           itemAdded: this.props.itemAdded
         });
         this.getAllUnpinnedItems();
+      }
+
+      if (prevState.loggedIn !== this.props.loggedIn) {
+        this.setState({
+          loggedIn: this.props.loggedIn
+        });
       }
 
       console.log(this.state);
@@ -5944,7 +5949,9 @@ var Items = /*#__PURE__*/function (_Component) {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       //console.log('submitted')
-      this.componentDidMount();
+      //this.componentDidMount();
+      this.getAllPinnedItems();
+      this.getAllUnpinnedItems();
     }
   }, {
     key: "downvoteItem",
