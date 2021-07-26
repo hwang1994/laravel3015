@@ -68,7 +68,7 @@ handleSubmit( event ) {
       this.close();
     }
   })
-  .catch(function (response) {
+  .catch(response => {
     //alert('Error: can"t connect to database');
     this.props.fail();
     this.close();

@@ -5786,8 +5786,7 @@ var Items = /*#__PURE__*/function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevState) {
-      console.log('Item Component did Update!');
-
+      //console.log('Item Component did Update!');
       if (this.props.email !== this.state.email || this.props.loggedIn != this.state.loggedIn) {
         this.setState({
           email: this.props.email,
@@ -6617,8 +6616,9 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
         }
       })["catch"](function (response) {
         //alert('Error: can"t connect to database');
-        this.props.fail();
-        this.close();
+        _this2.props.fail();
+
+        _this2.close();
       });
     }
   }, {
