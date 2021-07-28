@@ -73,10 +73,10 @@ class ProfileController extends Controller
     {
         $user   = Auth::user();
         $userId = $user->getAttribute('id');
-        $pinId = $request->input('unpin');
+        $itemId = $request->input('unpin');
         if ($user !==null) {
-            $pin = Pin::find($pinId);
-            if ($pin!== null && $pin['user_id'] == $userId) {
+            $pin = Pin::where([['user_id','=',$userId],['item_id','=', $itemId]])->first();
+            if ($pin !== null && $pin['user_id'] == $userId) {
                 $pin->delete();
                 return response()->json(['Item unPinned']);
             }

@@ -6063,8 +6063,8 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: ["$", (Math.round(item.price * 100) / 100).toFixed(2)]
                     })]
                   })]
-                }, item.id)
-              });
+                })
+              }, item.id);
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "row",
@@ -6185,8 +6185,8 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: ["$", (Math.round(item.price * 100) / 100).toFixed(2)]
                     })]
                   })]
-                }, item.id)
-              });
+                })
+              }, item.id);
             })
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Row__WEBPACK_IMPORTED_MODULE_5__.default, {
             xs: 1,
@@ -6255,8 +6255,8 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: ["$", (Math.round(item.price * 100) / 100).toFixed(2)]
                     })]
                   })]
-                }, item.id)
-              });
+                })
+              }, item.id);
             })
           })]
         });

@@ -252,8 +252,8 @@ class Items extends Component {
             <Row xs={1} md={4} className="g-4">
              {this.state.recentlyViewedItems.map(item => {
                   return (
-                    <Col>
-                      <Card style={{ width: '24rem', marginRight: '4rem' }} key={item.id}>
+                    <Col key={item.id}>
+                      <Card style={{ width: '24rem', marginRight: '4rem' }}>
                         <Card.Header>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                           <Link to={`/product?id=${item.id}`} >
                             <Card.Img variant="top" src={baseUrl+photoStorage+item.picture}/>
@@ -288,8 +288,8 @@ class Items extends Component {
               <Row xs={1} md={4} className="g-4">            
               {this.state.pinnedItems.map(item => {
                   return (
-                    <Col>
-                      <Card border="warning" style={{ width: '24rem' }} key={item.id}>
+                    <Col key={item.id}>
+                      <Card border="warning" style={{ width: '24rem' }}>
                         <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.id)}><i className="fa fa-dot-circle-o"></i></Button>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`} >
                           <Card.Img variant="top" src={baseUrl+photoStorage+item.picture}  />
@@ -311,8 +311,8 @@ class Items extends Component {
               <Row xs={1} md={4} className="g-4">
               {this.state.unpinnedItems.map(item => {
                   return (
-                    <Col>
-                      <Card style={{ width: '24rem'}} key={item.id} >
+                    <Col key={item.id}>
+                      <Card style={{ width: '24rem'}}>
                         <Card.Header>{ this.state.email ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`}>
                           <Card.Img variant="top" src={baseUrl+photoStorage+item.picture} />
