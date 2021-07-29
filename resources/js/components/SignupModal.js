@@ -18,7 +18,6 @@ class SignupModal extends Component {
     password: '',
     verifyPassword: '',
     showModal: false,
-    signupResponse: '',
   };
 
   this.open = this.open.bind(this);
@@ -47,26 +46,20 @@ handleSubmit( event ) {
     url: signupUrl,
     data: formData,
     withCredentials: true,
-    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content') } }
+    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'), crossDomain: true } }
   })
   .then((response) => {
-    console.log(response.data)
-    this.setState({
-      signupResponse: response.data
-    });
-    if (this.state.signupResponse=='Signed Up!') {
-      console.log('true')
+    if (response.data =='Signed Up!') {
       this.props.action();
       this.close();
     }
-    else if (this.state.signupResponse=='Email is already signed up!') {
-      alert(this.state.signupResponse)
+    else if (response.data =='Email is already signed up!') {
+      alert(response.data)
       this.close();
     }
   })
-  .catch((response) => {
-      //handle error
-      this.props.fail();
+  .catch((error) => {
+      this.props.fail(Object.values(error.response.data.errors));
       this.close();
   });
 }

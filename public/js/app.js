@@ -5490,11 +5490,9 @@ var Home = /*#__PURE__*/function (_Component) {
     };
     _this.isLoggedIn = _this.isLoggedIn.bind(_assertThisInitialized(_this));
     _this.logOut = _this.logOut.bind(_assertThisInitialized(_this));
-    _this.newItemfailure = _this.newItemfailure.bind(_assertThisInitialized(_this));
-    _this.loginfailure = _this.loginfailure.bind(_assertThisInitialized(_this));
     _this.newItem = _this.newItem.bind(_assertThisInitialized(_this));
     _this.downvoteMessage = _this.downvoteMessage.bind(_assertThisInitialized(_this));
-    _this.downvoteFailure = _this.downvoteFailure.bind(_assertThisInitialized(_this));
+    _this.setErrorMessage = _this.setErrorMessage.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -5544,20 +5542,6 @@ var Home = /*#__PURE__*/function (_Component) {
       console.log(this.state);
     }
   }, {
-    key: "newItemfailure",
-    value: function newItemfailure() {
-      this.setState({
-        errorMessage: 'invalid New Item!'
-      });
-    }
-  }, {
-    key: "loginfailure",
-    value: function loginfailure() {
-      this.setState({
-        errorMessage: 'login/signup invalid!'
-      });
-    }
-  }, {
     key: "logOut",
     value: function logOut() {
       axios__WEBPACK_IMPORTED_MODULE_1___default().get(logoutUrl, {
@@ -5583,10 +5567,10 @@ var Home = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
-    key: "downvoteFailure",
-    value: function downvoteFailure() {
+    key: "setErrorMessage",
+    value: function setErrorMessage(message) {
       this.setState({
-        errorMessage: 'no downvoting same message twice'
+        errorMessage: message
       });
     }
   }, {
@@ -5626,10 +5610,10 @@ var Home = /*#__PURE__*/function (_Component) {
             className: "col-md-6 col-md-offset-3",
             children: [this.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_NewItemModal_js__WEBPACK_IMPORTED_MODULE_2__.default, {
               action: this.newItem,
-              fail: this.newItemfailure
+              fail: this.setErrorMessage
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SignupModal_js__WEBPACK_IMPORTED_MODULE_3__.default, {
               action: this.isLoggedIn,
-              fail: this.loginfailure
+              fail: this.setErrorMessage
             }), this.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               className: "btn btn-default pull-right",
               onClick: this.logOut,
@@ -5639,7 +5623,7 @@ var Home = /*#__PURE__*/function (_Component) {
               }), " Logout"]
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_LoginModal_js__WEBPACK_IMPORTED_MODULE_4__.default, {
               action: this.isLoggedIn,
-              fail: this.loginfailure
+              fail: this.setErrorMessage
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Items_js__WEBPACK_IMPORTED_MODULE_5__.default, {
@@ -5647,7 +5631,7 @@ var Home = /*#__PURE__*/function (_Component) {
           email: this.state.email,
           loggedIn: this.state.loggedIn,
           action: this.downvoteMessage,
-          fail: this.downvoteFailure
+          fail: this.setErrorMessage
         })]
       });
     }
@@ -5971,10 +5955,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
           _this6.componentDidMount();
         } else if (response.data == 'No downvoting more than once on same product!') {
-          _this6.props.fail();
+          _this6.props.fail(response.data);
         }
-      })["catch"](function () {
-        _this6.props.fail();
+      })["catch"](function (error) {
+        _this6.props.fail(Object.values(error.response.data.errors));
+
+        _this6.close();
       });
     }
   }, {
@@ -6337,8 +6323,7 @@ var LoginModal = /*#__PURE__*/function (_Component) {
     _this.state = {
       email: '',
       password: '',
-      showModal: false,
-      loginResponse: ''
+      showModal: false
     };
     _this.open = _this.open.bind(_assertThisInitialized(_this));
     _this.close = _this.close.bind(_assertThisInitialized(_this));
@@ -6383,22 +6368,17 @@ var LoginModal = /*#__PURE__*/function (_Component) {
       }).then(function (response) {
         console.log(response.data);
 
-        _this2.setState({
-          loginResponse: response.data
-        });
-
-        if (_this2.state.loginResponse == 'Logged In!') {
+        if (response.data == 'Logged In!') {
           _this2.props.action();
 
           _this2.close();
         } else {
-          _this2.props.fail();
+          _this2.props.fail(response.data);
 
           _this2.close();
         }
-      })["catch"](function (response) {
-        //handle error
-        alert('Error: can"t connect to backend/database'); //this.props.fail();
+      })["catch"](function (error) {
+        _this2.props.fail(Object.values(error.response.data.errors));
 
         _this2.close();
       });
@@ -6545,7 +6525,6 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
       price: '',
       description: '',
       file: null,
-      uploadResponse: '',
       showModal: false
     };
     _this.open = _this.open.bind(_assertThisInitialized(_this));
@@ -6588,17 +6567,12 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
         config: {
           headers: {
             'Content-Type': 'multipart/form-data',
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'),
             crossDomain: true
           }
         }
       }).then(function (response) {
-        console.log(response.data);
-
-        _this2.setState({
-          uploadResponse: response.data
-        });
-
-        if (_this2.state.uploadResponse == 'Item Uploaded') {
+        if (response.data == 'Item Uploaded') {
           _this2.props.action();
 
           _this2.close();
@@ -6609,14 +6583,9 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
             description: '',
             file: null
           });
-        } else {
-          _this2.props.fail();
-
-          _this2.close();
         }
-      })["catch"](function (response) {
-        //alert('Error: can"t connect to database');
-        _this2.props.fail();
+      })["catch"](function (error) {
+        _this2.props.fail(Object.values(error.response.data.errors));
 
         _this2.close();
       });
@@ -6942,8 +6911,7 @@ var SignupModal = /*#__PURE__*/function (_Component) {
       email: '',
       password: '',
       verifyPassword: '',
-      showModal: false,
-      signupResponse: ''
+      showModal: false
     };
     _this.open = _this.open.bind(_assertThisInitialized(_this));
     _this.close = _this.close.bind(_assertThisInitialized(_this));
@@ -6985,30 +6953,22 @@ var SignupModal = /*#__PURE__*/function (_Component) {
         config: {
           headers: {
             'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'),
+            crossDomain: true
           }
         }
       }).then(function (response) {
-        console.log(response.data);
-
-        _this2.setState({
-          signupResponse: response.data
-        });
-
-        if (_this2.state.signupResponse == 'Signed Up!') {
-          console.log('true');
-
+        if (response.data == 'Signed Up!') {
           _this2.props.action();
 
           _this2.close();
-        } else if (_this2.state.signupResponse == 'Email is already signed up!') {
-          alert(_this2.state.signupResponse);
+        } else if (response.data == 'Email is already signed up!') {
+          alert(response.data);
 
           _this2.close();
         }
-      })["catch"](function (response) {
-        //handle error
-        _this2.props.fail();
+      })["catch"](function (error) {
+        _this2.props.fail(Object.values(error.response.data.errors));
 
         _this2.close();
       });

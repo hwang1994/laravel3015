@@ -228,11 +228,12 @@ class Items extends Component {
           this.componentDidMount();
         }
         else if (response.data=='No downvoting more than once on same product!') {
-          this.props.fail();
+          this.props.fail(response.data);
         }
       })
-      .catch(() => {
-        this.props.fail();
+      .catch((error) => {
+        this.props.fail(Object.values(error.response.data.errors));
+        this.close();
     });
   }
 

@@ -16,7 +16,6 @@ class NewItemModal extends Component {
     price: '',
     description: '',
     file: null,
-    uploadResponse: '',
     showModal: false
   };
 
@@ -46,14 +45,10 @@ handleSubmit( event ) {
     url: postItemUrl,
     data: formData,
     withCredentials: true,
-    config: { headers: {'Content-Type': 'multipart/form-data', crossDomain: true } }
+    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'), crossDomain: true } }
   })
   .then((response) => {
-    console.log(response.data)
-    this.setState({
-      uploadResponse: response.data
-    });
-    if (this.state.uploadResponse=='Item Uploaded') {
+    if (response.data=='Item Uploaded') {
       this.props.action();
       this.close();
       this.setState({
@@ -63,14 +58,9 @@ handleSubmit( event ) {
         file: null
       });
     }
-    else {
-      this.props.fail();
-      this.close();
-    }
   })
-  .catch(response => {
-    //alert('Error: can"t connect to database');
-    this.props.fail();
+  .catch(error => {
+    this.props.fail(Object.values(error.response.data.errors));
     this.close();
   });
 }

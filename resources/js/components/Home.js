@@ -23,11 +23,9 @@ class Home extends Component  {
   
       this.isLoggedIn = this.isLoggedIn.bind(this);
       this.logOut = this.logOut.bind(this);
-      this.newItemfailure = this.newItemfailure.bind(this);
-      this.loginfailure = this.loginfailure.bind(this);
       this.newItem = this.newItem.bind(this);
       this.downvoteMessage = this.downvoteMessage.bind(this);
-      this.downvoteFailure = this.downvoteFailure.bind(this);
+      this.setErrorMessage = this.setErrorMessage.bind(this);
     }
   
     componentDidMount() {
@@ -71,18 +69,6 @@ class Home extends Component  {
       console.log(this.state);
     }
   
-    newItemfailure() {
-      this.setState({ 
-        errorMessage: 'invalid New Item!'
-      })
-    }
-  
-    loginfailure() {
-      this.setState({ 
-        errorMessage: 'login/signup invalid!'
-      })
-    }
-  
     logOut() {
       axios.get(logoutUrl, {withCredentials: true,});
       this.isLoggedIn();
@@ -103,11 +89,11 @@ class Home extends Component  {
         });
     }
 
-    downvoteFailure() {
-        this.setState({ 
-            errorMessage: 'no downvoting same message twice'
-        });
-    }
+    setErrorMessage(message) {
+      this.setState({ 
+          errorMessage: message
+      });
+  }
   
     render() {
       return (
@@ -118,14 +104,14 @@ class Home extends Component  {
                 {!this.state.downvoteMessage ? <span></span>:<div className="alert alert-success text-center">{this.state.downvoteMessage}<br></br><Button variant="secondary" onClick={ e => this.setState({downvoteMessage: null})}>Clear Message</Button></div>}
               </div>
             <div className="col-md-6 col-md-offset-3">
-                {this.state.loggedIn ? <NewItemModal action={this.newItem} fail={this.newItemfailure}/>: <SignupModal action={this.isLoggedIn} fail={this.loginfailure}/>}
+                {this.state.loggedIn ? <NewItemModal action={this.newItem} fail={this.setErrorMessage}/>: <SignupModal action={this.isLoggedIn} fail={this.setErrorMessage}/>}
                 {/* <button className="btn btn-default pull-right"><i className="fa fa-sign-out"> </i> Logout</button>
                 <button className="btn btn-default pull-right" data-toggle="modal" data-target="#login"><i className="fa fa-sign-in"> </i> Login</button> */}
-                {this.state.loggedIn ? <button className="btn btn-default pull-right" onClick={this.logOut}><i className="fa fa-sign-out"> </i> Logout</button> : <LoginModal action={this.isLoggedIn} fail={this.loginfailure}/>}
+                {this.state.loggedIn ? <button className="btn btn-default pull-right" onClick={this.logOut}><i className="fa fa-sign-out"> </i> Logout</button> : <LoginModal action={this.isLoggedIn} fail={this.setErrorMessage}/>}
             </div>
           </div>
           {/* <Items itemAdded={this.state.itemAdded} email={this.state.email} action={this.downvoteMessage} fail={this.downvoteFailure}/> */}
-          <Items itemAdded={this.state.itemAdded} email={this.state.email} loggedIn={this.state.loggedIn} action={this.downvoteMessage} fail={this.downvoteFailure}/>
+          <Items itemAdded={this.state.itemAdded} email={this.state.email} loggedIn={this.state.loggedIn} action={this.downvoteMessage} fail={this.setErrorMessage}/>
         </div>
       );
     }

@@ -14,8 +14,7 @@ class LoginModal extends Component {
   this.state = {
     email: '',
     password: '',
-    showModal: false,
-    loginResponse: ''
+    showModal: false
   };
 
   this.open = this.open.bind(this);
@@ -45,24 +44,19 @@ handleSubmit( event ) {
   })
   .then((response) => {
     console.log(response.data)
-    this.setState({
-      loginResponse: response.data
-    });
-    if (this.state.loginResponse=='Logged In!') {
+    if (response.data=='Logged In!') {
       this.props.action();
       this.close();
     }
     else {
-      this.props.fail();
+      this.props.fail(response.data);
       this.close();
     }
   })
-  .catch((response) => {
-      //handle error
-      alert('Error: can"t connect to backend/database');
-      //this.props.fail();
-      this.close();
-  });
+  .catch((error) => {
+    this.props.fail(Object.values(error.response.data.errors));
+    this.close();
+});
 }
 
 render() {
