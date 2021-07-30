@@ -5785,15 +5785,8 @@ var Items = /*#__PURE__*/function (_Component) {
           itemAdded: this.props.itemAdded
         });
         this.getAllUnpinnedItems();
-      }
+      } //console.log(this.state)
 
-      if (prevState.loggedIn !== this.props.loggedIn) {
-        this.setState({
-          loggedIn: this.props.loggedIn
-        });
-      }
-
-      console.log(this.state);
     }
   }, {
     key: "getAllItems",
@@ -5816,8 +5809,7 @@ var Items = /*#__PURE__*/function (_Component) {
         if (response.data !== undefined) {
           _this3.setState({
             unpinnedItems: response.data,
-            errorMessage: null,
-            email: _this3.props.email
+            errorMessage: null
           });
         } else {
           _this3.setState({
@@ -5844,8 +5836,7 @@ var Items = /*#__PURE__*/function (_Component) {
         if (response.data !== undefined) {
           _this4.setState({
             recentlyViewedItems: response.data,
-            errorMessage: null,
-            email: _this4.props.email
+            errorMessage: null
           });
         } else {
           _this4.setState({
@@ -5872,8 +5863,7 @@ var Items = /*#__PURE__*/function (_Component) {
         if (response.data !== undefined) {
           _this5.setState({
             pinnedItems: response.data,
-            errorMessage: null,
-            email: _this5.props.email
+            errorMessage: null
           });
         } else {
           _this5.setState({
@@ -5889,21 +5879,30 @@ var Items = /*#__PURE__*/function (_Component) {
   }, {
     key: "deleteItem",
     value: function deleteItem(id) {
+      var _this6 = this;
+
       //console.log('delete clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/delete?delete=' + id, {
         withCredentials: true
       });
       promise.then(function (response) {
         console.log('delete response', response.data);
-      })["catch"](function () {});
+      })["catch"](function (error) {
+        _this6.props.fail(Object.values(error.response.data.errors));
+      });
       this.getAllItems();
     }
   }, {
     key: "pinItem",
     value: function pinItem(id) {
+      var _this7 = this;
+
       //console.log('pin clicked');
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/pin?pin=' + id, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/pin?pin=' + id, {
         withCredentials: true
+      });
+      promise["catch"](function (error) {
+        _this7.props.fail(Object.values(error.response.data.errors));
       });
       this.getAllPinnedItems();
       this.getAllUnpinnedItems();
@@ -5911,12 +5910,14 @@ var Items = /*#__PURE__*/function (_Component) {
   }, {
     key: "unpinItem",
     value: function unpinItem(id) {
+      var _this8 = this;
+
       //console.log('unpin clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/unpin?unpin=' + id, {
         withCredentials: true
       });
-      promise.then(function (response) {
-        console.log('unpin response' + response.data);
+      promise["catch"](function (error) {
+        _this8.props.fail(Object.values(error.response.data.errors));
       });
       this.getAllPinnedItems();
       this.getAllUnpinnedItems();
@@ -5939,7 +5940,7 @@ var Items = /*#__PURE__*/function (_Component) {
   }, {
     key: "downvoteItem",
     value: function downvoteItem(id) {
-      var _this6 = this;
+      var _this9 = this;
 
       //console.log('downvote clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/downvote?downvote=' + id, {
@@ -5949,24 +5950,22 @@ var Items = /*#__PURE__*/function (_Component) {
         console.log('downvoted response', response.data);
 
         if (response.data == 'Downvoted!') {
-          _this6.props.action();
+          _this9.props.action();
         } else if (response.data == 'Downvoted! Now Deleted to due too many downvotes') {
           alert(response.data);
 
-          _this6.componentDidMount();
+          _this9.componentDidMount();
         } else if (response.data == 'No downvoting more than once on same product!') {
-          _this6.props.fail(response.data);
+          _this9.props.fail(response.data);
         }
       })["catch"](function (error) {
-        _this6.props.fail(Object.values(error.response.data.errors));
-
-        _this6.close();
+        _this9.props.fail(Object.values(error.response.data.errors));
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this10 = this;
 
       var url = window.location.href;
 
@@ -6001,12 +6000,12 @@ var Items = /*#__PURE__*/function (_Component) {
                     marginRight: '4rem'
                   },
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Header, {
-                    children: _this7.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    children: _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
                         onClick: function onClick(e) {
-                          return _this7.deleteItem(item.id);
+                          return _this10.deleteItem(item.id);
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                           className: "fa fa-trash"
@@ -6024,10 +6023,10 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this7.state.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
-                        return _this7.downvoteItem(item.id);
+                        return _this10.downvoteItem(item.id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-thumbs-down"
@@ -6118,17 +6117,17 @@ var Items = /*#__PURE__*/function (_Component) {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "warning",
                       onClick: function onClick(e) {
-                        return _this7.unpinItem(item.id);
+                        return _this10.unpinItem(item.id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-dot-circle-o"
                       })
-                    }), _this7.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    }), _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
                         onClick: function onClick(e) {
-                          return _this7.deleteItem(item.item_id);
+                          return _this10.deleteItem(item.item_id);
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                           className: "fa fa-trash"
@@ -6146,10 +6145,10 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this7.state.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
-                        return _this7.downvoteItem(item.item_id);
+                        return _this10.downvoteItem(item.item_id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-thumbs-down"
@@ -6185,20 +6184,20 @@ var Items = /*#__PURE__*/function (_Component) {
                     width: '24rem'
                   },
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Header, {
-                    children: [_this7.state.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    children: [_this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "warning",
                       onClick: function onClick(e) {
-                        return _this7.pinItem(item.id);
+                        return _this10.pinItem(item.id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-thumb-tack"
                       })
-                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), _this7.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
                         onClick: function onClick(e) {
-                          return _this7.deleteItem(item.id);
+                          return _this10.deleteItem(item.id);
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                           className: "fa fa-trash"
@@ -6216,10 +6215,10 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this7.state.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
-                        return _this7.downvoteItem(item.id);
+                        return _this10.downvoteItem(item.id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-thumbs-down"

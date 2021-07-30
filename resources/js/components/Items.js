@@ -84,12 +84,7 @@ class Items extends Component {
       })
       this.getAllUnpinnedItems();
     }
-    if (prevState.loggedIn!==this.props.loggedIn) {
-      this.setState({ 
-        loggedIn: this.props.loggedIn
-      })
-    }
-    console.log(this.state)
+    //console.log(this.state)
   }
 
   getAllItems() {
@@ -106,8 +101,7 @@ class Items extends Component {
         if (response.data!==undefined) {
           this.setState({ 
             unpinnedItems: response.data,
-            errorMessage:null,
-            email: this.props.email,
+            errorMessage:null
         });
         }
         else {
@@ -131,8 +125,7 @@ class Items extends Component {
         if (response.data!==undefined) {
           this.setState({ 
             recentlyViewedItems: response.data,
-            errorMessage:null,
-            email: this.props.email
+            errorMessage:null
         });
         }
         else {
@@ -156,8 +149,7 @@ class Items extends Component {
         if (response.data!==undefined) {
           this.setState({ 
             pinnedItems: response.data,
-            errorMessage:null,
-            email: this.props.email
+            errorMessage:null
         });
         }
         else {
@@ -180,14 +172,19 @@ class Items extends Component {
       .then((response) => {
         console.log('delete response', response.data);
       })
-      .catch(() => {
+      .catch((error) => {
+        this.props.fail(Object.values(error.response.data.errors));
     });
     this.getAllItems();
   }
 
   pinItem(id) {
     //console.log('pin clicked');
-    axios.get(baseUrl+'/pin?pin='+id, {withCredentials: true,});
+    const promise = axios.get(baseUrl+'/pin?pin='+id, {withCredentials: true,});
+    promise
+    .catch((error) => {
+      this.props.fail(Object.values(error.response.data.errors));
+    });
     this.getAllPinnedItems();
     this.getAllUnpinnedItems();
   }
@@ -196,8 +193,8 @@ class Items extends Component {
     //console.log('unpin clicked');
     const promise = axios.get(baseUrl+'/unpin?unpin='+id, {withCredentials: true,});
     promise
-    .then((response) => {
-      console.log('unpin response' + response.data);
+    .catch((error) => {
+      this.props.fail(Object.values(error.response.data.errors));
     });
     this.getAllPinnedItems();
     this.getAllUnpinnedItems();
@@ -233,7 +230,6 @@ class Items extends Component {
       })
       .catch((error) => {
         this.props.fail(Object.values(error.response.data.errors));
-        this.close();
     });
   }
 
@@ -262,7 +258,7 @@ class Items extends Component {
                           <Card.Body>
                             <Card.Title>{item.title}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
-                            { this.state.email ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                            { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                           </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>
@@ -298,7 +294,7 @@ class Items extends Component {
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>
                           <Card.Text>{item.description}</Card.Text>
-                          { this.state.email ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.item_id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                          { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.item_id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                         </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>
@@ -314,14 +310,14 @@ class Items extends Component {
                   return (
                     <Col key={item.id}>
                       <Card style={{ width: '24rem'}}>
-                        <Card.Header>{ this.state.email ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
+                        <Card.Header>{ this.state.loggedIn ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`}>
                           <Card.Img variant="top" src={baseUrl+photoStorage+item.picture} />
                         </Link>
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>
                           <Card.Text>{item.description}</Card.Text>
-                          { this.state.email ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                          { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                         </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>

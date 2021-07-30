@@ -21,7 +21,7 @@ class ProductView extends Component {
 
   componentDidMount() {
     //console.log('ProductView Mounted')
-    console.log(this.state.selectedID)
+    //console.log(this.state.selectedID)
     const promise = axios.get(baseUrl+'/getitem?id='+this.state.selectedID, {withCredentials: true,});
     promise
     .then((response) => {
