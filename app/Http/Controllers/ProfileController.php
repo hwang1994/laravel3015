@@ -105,7 +105,7 @@ class ProfileController extends Controller
                 $itemDownvotes = Downvote::where('item_id', '=', $itemId)->count(); 
                 if ($itemDownvotes >= env('MAX_DOWNVOTES')) {
                     $pictureFile = $item['picture'];
-                    $this->deleteItemById($itemId, $pictureFile);
+                    $this->deleteItemById($itemId, $pictureFile, $request);
                     return response()->json(['Downvoted! Now Deleted to due too many downvotes']);
                 }
                 else {
@@ -129,7 +129,7 @@ class ProfileController extends Controller
         $item = Item::find($itemId);
         $pictureFile = $item['picture'];
         if ($item!==null && $item['user_id']==$userId) {
-            $this->deleteItemById($itemId, $pictureFile);
+            $this->deleteItemById($itemId, $pictureFile, $request);
             return response()->json(['Item deleted!']);
         }
         else {
@@ -137,11 +137,22 @@ class ProfileController extends Controller
         }
     }
 
-    private function deleteItemById($itemId, $pictureFile)
+    private function deleteItemById($itemId, $pictureFile, Request $request)
     {
         Downvote::where('item_id', $itemId)->delete();
         Pin::where('item_id', $itemId)->delete();              
         Item::where('id', $itemId)->delete();
+        if ($request->hasCookie('recently_viewed')) {
+            $cookie = $request->cookie('recently_viewed');
+            $pieces = preg_split("/\|/", $cookie);
+            for($i = 0; $i < count($pieces); $i++){
+                if ($pieces[$i]==$itemId) {
+                    array_splice($pieces, $i, 1);
+                    $data=$pieces[0].'|'.$pieces[1].'|'.$pieces[2];
+                    $cookie = Cookie::queue(Cookie::make('recently_viewed', $data, env('ITEM_LIFE_MINUTES')));
+                }
+            }
+        }
         unlink(public_path('storage/pictures/'.$pictureFile));
     }
 
@@ -280,7 +291,6 @@ class ProfileController extends Controller
         if (count($recentlyViewedItems)>1) {
             usort($recentlyViewedItems, array($this, "cmp"));
         }
-
         return response()->json($recentlyViewedItems);
     }
 
