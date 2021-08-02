@@ -5,8 +5,8 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-let baseUrl =window.location.origin;
-let photoStorage ='/storage/pictures/';
+const BASE_URL =window.location.origin;
+const PHOTO_STORAGE ='/storage/pictures/';
 
 class ProductView extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class ProductView extends Component {
   componentDidMount() {
     //console.log('ProductView Mounted')
     //console.log(this.state.selectedID)
-    const promise = axios.get(baseUrl+'/getitem?id='+this.state.selectedID, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/getitem?id='+this.state.selectedID, {withCredentials: true,});
     promise
     .then((response) => {
       console.log('product view response', response.data);
@@ -52,7 +52,7 @@ class ProductView extends Component {
           <br></br>
             <Card key={this.state.selectedProduct.id}>
               <Card.Header><Link to='/'><Button>Back</Button></Link></Card.Header>
-              <Card.Img variant="top" src={baseUrl+photoStorage+this.state.selectedProduct.picture}  />
+              <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+this.state.selectedProduct.picture}  />
               <Card.Body>
                 <Card.Title>{this.state.selectedProduct.title}</Card.Title>
                 <Card.Text>{this.state.selectedProduct.description}</Card.Text>

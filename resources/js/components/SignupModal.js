@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
-let signupUrl =window.location.origin+'/signup';
+const SIGNUP_URL =window.location.origin+'/signup';
 
 class SignupModal extends Component {
   constructor(props, context) {
@@ -43,7 +43,7 @@ handleSubmit( event ) {
   formData.append('password_confirmation', this.state.verifyPassword)
   axios({
     method: 'post',
-    url: signupUrl,
+    url: SIGNUP_URL,
     data: formData,
     withCredentials: true,
     config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'), crossDomain: true } }

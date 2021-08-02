@@ -8,8 +8,8 @@ import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-let baseUrl =window.location.origin;
-let photoStorage ='/storage/pictures/';
+const BASE_URL =window.location.origin;
+const PHOTO_STORAGE ='/storage/pictures/';
 
 class Items extends Component {
   constructor(props) {
@@ -94,7 +94,7 @@ class Items extends Component {
   }
 
   getAllUnpinnedItems() {
-    const promise = axios.get(baseUrl+'/unpinned?term='+this.state.searchText, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/unpinned?term='+this.state.searchText, {withCredentials: true,});
     promise
       .then((response) => {
         console.log('items response', response.data);
@@ -118,7 +118,7 @@ class Items extends Component {
   }
 
   getAllRecentlyViewedItems() {
-    const promise = axios.get(baseUrl+'/recentlyviewed', {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/recentlyviewed', {withCredentials: true,});
     promise
       .then((response) => {
         console.log('recently viewed response', response.data);
@@ -142,7 +142,7 @@ class Items extends Component {
   }
 
   getAllPinnedItems() {
-    const promise = axios.get(baseUrl+'/pinned?term='+this.state.searchText, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/pinned?term='+this.state.searchText, {withCredentials: true,});
     promise
       .then((response) => {
         console.log('pinned response', response.data);
@@ -167,7 +167,7 @@ class Items extends Component {
 
   deleteItem(id) {
     //console.log('delete clicked');
-    const promise = axios.get(baseUrl+'/delete?delete='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/delete?delete='+id, {withCredentials: true,});
     promise
       .then((response) => {
         console.log('delete response', response.data);
@@ -180,7 +180,7 @@ class Items extends Component {
 
   pinItem(id) {
     //console.log('pin clicked');
-    const promise = axios.get(baseUrl+'/pin?pin='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true,});
     promise
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
@@ -191,7 +191,7 @@ class Items extends Component {
 
   unpinItem(id) {
     //console.log('unpin clicked');
-    const promise = axios.get(baseUrl+'/unpin?unpin='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true,});
     promise
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
@@ -213,7 +213,7 @@ class Items extends Component {
 
   downvoteItem(id) {
     //console.log('downvote clicked');
-    const promise = axios.get(baseUrl+'/downvote?downvote='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/downvote?downvote='+id, {withCredentials: true,});
     promise
       .then((response) => {
         console.log('downvoted response', response.data);
@@ -253,7 +253,7 @@ class Items extends Component {
                       <Card style={{ width: '24rem', marginRight: '4rem' }}>
                         <Card.Header>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                           <Link to={`/product?id=${item.id}`} >
-                            <Card.Img variant="top" src={baseUrl+photoStorage+item.picture}/>
+                            <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture}/>
                           </Link>
                           <Card.Body>
                             <Card.Title>{item.title}</Card.Title>
@@ -289,7 +289,7 @@ class Items extends Component {
                       <Card border="warning" style={{ width: '24rem' }}>
                         <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.id)}><i className="fa fa-dot-circle-o"></i></Button>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`} >
-                          <Card.Img variant="top" src={baseUrl+photoStorage+item.picture}  />
+                          <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture}  />
                         </Link>
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>
@@ -312,7 +312,7 @@ class Items extends Component {
                       <Card style={{ width: '24rem'}}>
                         <Card.Header>{ this.state.loggedIn ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`}>
-                          <Card.Img variant="top" src={baseUrl+photoStorage+item.picture} />
+                          <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture} />
                         </Link>
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>

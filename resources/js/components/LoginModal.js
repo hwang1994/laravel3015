@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-let loginUrl =window.location.origin+'/login';
+const LOGIN_URL =window.location.origin+'/login';
 
 class LoginModal extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ handleSubmit( event ) {
   formData.append('password', this.state.password)
   axios({
     method: 'post',
-    url: loginUrl,
+    url: LOGIN_URL,
     data: formData,
     withCredentials: true,
     config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content') } }

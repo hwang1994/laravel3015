@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-let postItemUrl =window.location.origin+'/newitem';
+const POST_ITEM_URL =window.location.origin+'/newitem';
 
 class NewItemModal extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ handleSubmit( event ) {
   formData.append('file', this.state.file)
   axios({
     method: 'post',
-    url: postItemUrl,
+    url: POST_ITEM_URL,
     data: formData,
     withCredentials: true,
     config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'), crossDomain: true } }

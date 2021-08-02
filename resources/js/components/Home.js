@@ -6,8 +6,8 @@ import SignupModal from './SignupModal.js';
 import LoginModal from './LoginModal.js';
 import Items from './Items.js';
 
-let checkLoginUrl =window.location.origin+'/islogin';
-let logoutUrl =window.location.origin+'/logout';
+const CHECK_LOGIN_URL =window.location.origin+'/islogin';
+const LOGOUT_URL =window.location.origin+'/logout';
 
 class Home extends Component  {
     constructor(props) {
@@ -43,7 +43,7 @@ class Home extends Component  {
     }
   
     isLoggedIn() {
-      const promise = axios.get(checkLoginUrl, {withCredentials: true,});
+      const promise = axios.get(CHECK_LOGIN_URL, {withCredentials: true,});
       promise
         .then((response) => {
           console.log('response from update', response.data);
@@ -70,7 +70,7 @@ class Home extends Component  {
     }
   
     logOut() {
-      axios.get(logoutUrl, {withCredentials: true,});
+      axios.get(LOGOUT_URL, {withCredentials: true,});
       this.isLoggedIn();
       this.setState({ 
         errorMessage: null

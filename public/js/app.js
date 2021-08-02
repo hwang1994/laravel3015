@@ -5467,8 +5467,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var checkLoginUrl = window.location.origin + '/islogin';
-var logoutUrl = window.location.origin + '/logout';
+var CHECK_LOGIN_URL = window.location.origin + '/islogin';
+var LOGOUT_URL = window.location.origin + '/logout';
 
 var Home = /*#__PURE__*/function (_Component) {
   _inherits(Home, _Component);
@@ -5516,7 +5516,7 @@ var Home = /*#__PURE__*/function (_Component) {
     value: function isLoggedIn() {
       var _this2 = this;
 
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(checkLoginUrl, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(CHECK_LOGIN_URL, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -5544,7 +5544,7 @@ var Home = /*#__PURE__*/function (_Component) {
   }, {
     key: "logOut",
     value: function logOut() {
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get(logoutUrl, {
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get(LOGOUT_URL, {
         withCredentials: true
       });
       this.isLoggedIn();
@@ -5700,8 +5700,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var baseUrl = window.location.origin;
-var photoStorage = '/storage/pictures/';
+var BASE_URL = window.location.origin;
+var PHOTO_STORAGE = '/storage/pictures/';
 
 var Items = /*#__PURE__*/function (_Component) {
   _inherits(Items, _Component);
@@ -5800,7 +5800,7 @@ var Items = /*#__PURE__*/function (_Component) {
     value: function getAllUnpinnedItems() {
       var _this3 = this;
 
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/unpinned?term=' + this.state.searchText, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/unpinned?term=' + this.state.searchText, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -5827,7 +5827,7 @@ var Items = /*#__PURE__*/function (_Component) {
     value: function getAllRecentlyViewedItems() {
       var _this4 = this;
 
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/recentlyviewed', {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/recentlyviewed', {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -5854,7 +5854,7 @@ var Items = /*#__PURE__*/function (_Component) {
     value: function getAllPinnedItems() {
       var _this5 = this;
 
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/pinned?term=' + this.state.searchText, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/pinned?term=' + this.state.searchText, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -5882,7 +5882,7 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this6 = this;
 
       //console.log('delete clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/delete?delete=' + id, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/delete?delete=' + id, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -5898,7 +5898,7 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this7 = this;
 
       //console.log('pin clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/pin?pin=' + id, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/pin?pin=' + id, {
         withCredentials: true
       });
       promise["catch"](function (error) {
@@ -5913,7 +5913,7 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this8 = this;
 
       //console.log('unpin clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/unpin?unpin=' + id, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/unpin?unpin=' + id, {
         withCredentials: true
       });
       promise["catch"](function (error) {
@@ -5943,7 +5943,7 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this9 = this;
 
       //console.log('downvote clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/downvote?downvote=' + id, {
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/downvote?downvote=' + id, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -6016,7 +6016,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     to: "/product?id=".concat(item.id),
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Img, {
                       variant: "top",
-                      src: baseUrl + photoStorage + item.picture
+                      src: BASE_URL + PHOTO_STORAGE + item.picture
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Body, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Title, {
@@ -6138,7 +6138,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     to: "/product?id=".concat(item.id),
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Img, {
                       variant: "top",
-                      src: baseUrl + photoStorage + item.picture
+                      src: BASE_URL + PHOTO_STORAGE + item.picture
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Body, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Title, {
@@ -6208,7 +6208,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     to: "/product?id=".concat(item.id),
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Img, {
                       variant: "top",
-                      src: baseUrl + photoStorage + item.picture
+                      src: BASE_URL + PHOTO_STORAGE + item.picture
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Body, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Title, {
@@ -6306,7 +6306,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var loginUrl = window.location.origin + '/login';
+var LOGIN_URL = window.location.origin + '/login';
 
 var LoginModal = /*#__PURE__*/function (_Component) {
   _inherits(LoginModal, _Component);
@@ -6355,7 +6355,7 @@ var LoginModal = /*#__PURE__*/function (_Component) {
       formData.append('password', this.state.password);
       axios__WEBPACK_IMPORTED_MODULE_1___default()({
         method: 'post',
-        url: loginUrl,
+        url: LOGIN_URL,
         data: formData,
         withCredentials: true,
         config: {
@@ -6506,7 +6506,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var postItemUrl = window.location.origin + '/newitem';
+var POST_ITEM_URL = window.location.origin + '/newitem';
 
 var NewItemModal = /*#__PURE__*/function (_Component) {
   _inherits(NewItemModal, _Component);
@@ -6560,7 +6560,7 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
       formData.append('file', this.state.file);
       axios__WEBPACK_IMPORTED_MODULE_1___default()({
         method: 'post',
-        url: postItemUrl,
+        url: POST_ITEM_URL,
         data: formData,
         withCredentials: true,
         config: {
@@ -6735,8 +6735,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var baseUrl = window.location.origin;
-var photoStorage = '/storage/pictures/';
+var BASE_URL = window.location.origin;
+var PHOTO_STORAGE = '/storage/pictures/';
 
 var ProductView = /*#__PURE__*/function (_Component) {
   _inherits(ProductView, _Component);
@@ -6762,8 +6762,8 @@ var ProductView = /*#__PURE__*/function (_Component) {
       var _this2 = this;
 
       //console.log('ProductView Mounted')
-      console.log(this.state.selectedID);
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(baseUrl + '/getitem?id=' + this.state.selectedID, {
+      //console.log(this.state.selectedID)
+      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/getitem?id=' + this.state.selectedID, {
         withCredentials: true
       });
       promise.then(function (response) {
@@ -6800,7 +6800,7 @@ var ProductView = /*#__PURE__*/function (_Component) {
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_4__.default.Img, {
                 variant: "top",
-                src: baseUrl + photoStorage + this.state.selectedProduct.picture
+                src: BASE_URL + PHOTO_STORAGE + this.state.selectedProduct.picture
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_4__.default.Body, {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_4__.default.Title, {
                   children: this.state.selectedProduct.title
@@ -6891,7 +6891,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var signupUrl = window.location.origin + '/signup';
+var SIGNUP_URL = window.location.origin + '/signup';
 
 var SignupModal = /*#__PURE__*/function (_Component) {
   _inherits(SignupModal, _Component);
@@ -6946,7 +6946,7 @@ var SignupModal = /*#__PURE__*/function (_Component) {
       formData.append('password_confirmation', this.state.verifyPassword);
       axios__WEBPACK_IMPORTED_MODULE_2___default()({
         method: 'post',
-        url: signupUrl,
+        url: SIGNUP_URL,
         data: formData,
         withCredentials: true,
         config: {
