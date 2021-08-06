@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Cookie;
 
-class ProfileController extends Controller
+class ItemController extends Controller
 {
     public function createItem(Request $request)
     {

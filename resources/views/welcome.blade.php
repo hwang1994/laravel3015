@@ -39,7 +39,7 @@
                         <a href="#" class="btn btn-default pull-right" data-toggle="modal" data-target="#signup"><i class="fa fa-user"> </i> Sign Up</a>
                     </div>
                 </div> -->
-                <div class="col-md  " id="root">
+                <div class="col-md  " id="root"> 
                 </div>
             </div>
         </div>

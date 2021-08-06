@@ -5763,9 +5763,11 @@ var Items = /*#__PURE__*/function (_Component) {
         this.setState({
           searchText: window.location.search.substr(6)
         });
-      }
+        this.getAllItems();
+      } else {
+        this.getAllItems();
+      } //console.log('END didMount');
 
-      this.getAllItems(); //console.log('END didMount');
     }
   }, {
     key: "componentDidUpdate",

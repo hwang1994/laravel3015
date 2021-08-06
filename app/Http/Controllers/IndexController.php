@@ -31,6 +31,6 @@ class IndexController extends Controller
 
         //return view('welcome');
 
-        return redirect()->route('home');
+        return view('welcome', ['email' => null, 'loggedIn' => false]);
     }
 }

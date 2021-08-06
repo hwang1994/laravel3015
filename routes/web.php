@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,18 +22,17 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/islogin', [IndexController::class, 'islogin']);
 Route::get('/logout', [IndexController::class, 'logout']);
-Route::get('/unpinned', [ProfileController::class, 'unpinnedItems']);
-Route::get('/pinned', [ProfileController::class, 'pinnedItems'])->middleware('auth:profile');
-Route::get('/pin', [ProfileController::class, 'pinItem'])->middleware('auth:profile');
-Route::get('/unpin', [ProfileController::class, 'unpinItem'])->middleware('auth:profile');
-Route::get('/delete', [ProfileController::class, 'deleteItemByRequest'])->middleware('auth:profile');
-Route::get('/downvote', [ProfileController::class, 'downvoteItem'])->middleware('auth:profile');
-Route::get('/recentlyviewed', [ProfileController::class, 'recentlyViewed']);
+Route::get('/unpinned', [ItemController::class, 'unpinnedItems']);
+Route::get('/pinned', [ItemController::class, 'pinnedItems'])->middleware('auth:profile');
+Route::get('/pin', [ItemController::class, 'pinItem'])->middleware('auth:profile');
+Route::get('/unpin', [ItemController::class, 'unpinItem'])->middleware('auth:profile');
+Route::get('/delete', [ItemController::class, 'deleteItemByRequest'])->middleware('auth:profile');
+Route::get('/downvote', [ItemController::class, 'downvoteItem'])->middleware('auth:profile');
+Route::get('/recentlyviewed', [ItemController::class, 'recentlyViewed']);
 Route::get('/getitem', [ProductController::class, 'getItem']);
 
 Route::view('{path?}', 'welcome')->name('home'); 
 
 Route::post('/signup', [LoginController::class, 'signup']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/newitem', [ProfileController::class, 'createItem'])->middleware('auth:profile');
-
+Route::post('/newitem', [ItemController::class, 'createItem'])->middleware('auth:profile');
