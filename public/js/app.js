@@ -6563,8 +6563,7 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
         config: {
           headers: {
             'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'),
-            crossDomain: true
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
           }
         }
       }).then(function (response) {
@@ -6949,8 +6948,7 @@ var SignupModal = /*#__PURE__*/function (_Component) {
         config: {
           headers: {
             'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'),
-            crossDomain: true
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
           }
         }
       }).then(function (response) {

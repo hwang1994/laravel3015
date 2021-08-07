@@ -45,7 +45,7 @@ handleSubmit( event ) {
     url: POST_ITEM_URL,
     data: formData,
     withCredentials: true,
-    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content'), crossDomain: true } }
+    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content') } }
   })
   .then((response) => {
     if (response.data=='Item Uploaded') {
