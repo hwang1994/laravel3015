@@ -5506,10 +5506,9 @@ var Home = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevState) {
-      if (prevState.loggedIn !== this.state.loggedIn) {
-        console.log('HomeComponentDidUpdate');
-      }
+    value: function componentDidUpdate(prevState) {// if (prevState.loggedIn!==this.state.loggedIn) {
+      //   console.log('HomeComponentDidUpdate');
+      // }
     }
   }, {
     key: "isLoggedIn",
@@ -5715,15 +5714,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      email: _this.props.email,
       unpinnedItems: [],
       errorMessage: null,
       itemAdded: _this.props.itemAdded,
       recentlyViewedItems: [],
       pinnedItems: [],
-      searchText: '',
-      search: '',
-      loggedIn: _this.props.loggedIn
+      searchText: ''
     };
     _this.getAllItems = _this.getAllItems.bind(_assertThisInitialized(_this));
     _this.getAllUnpinnedItems = _this.getAllUnpinnedItems.bind(_assertThisInitialized(_this));
@@ -5749,21 +5745,24 @@ var Items = /*#__PURE__*/function (_Component) {
         if (window.location.search.includes("term=")) {
           _this2.setState({
             searchText: window.location.search.substr(6)
+          }, function () {
+            _this2.getAllItems();
           });
         } else {
           _this2.setState({
             searchText: ''
+          }, function () {
+            _this2.getAllItems();
           });
         }
-
-        _this2.getAllItems();
       };
 
       if (window.location.search.includes("term=")) {
         this.setState({
           searchText: window.location.search.substr(6)
+        }, function () {
+          _this2.getAllItems();
         });
-        this.getAllItems();
       } else {
         this.getAllItems();
       } //console.log('END didMount');
@@ -5771,21 +5770,14 @@ var Items = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevState) {
+    value: function componentDidUpdate(prevProps) {
       //console.log('Item Component did Update!');
-      if (this.props.email !== this.state.email || this.props.loggedIn != this.state.loggedIn) {
-        this.setState({
-          email: this.props.email,
-          loggedIn: this.props.loggedIn
-        });
+      if (this.props.email !== prevProps.email && this.props.loggedIn != prevProps.loggedIn) {
         this.getAllPinnedItems();
         this.getAllUnpinnedItems();
       }
 
-      if (prevState.itemAdded !== this.props.itemAdded) {
-        this.setState({
-          itemAdded: this.props.itemAdded
-        });
+      if (prevProps.itemAdded !== this.props.itemAdded) {
         this.getAllUnpinnedItems();
       } //console.log(this.state)
 
@@ -6002,7 +5994,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     marginRight: '4rem'
                   },
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Header, {
-                    children: _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    children: _this10.props.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
@@ -6025,7 +6017,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.props.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
                         return _this10.downvoteItem(item.id);
@@ -6097,6 +6089,9 @@ var Items = /*#__PURE__*/function (_Component) {
                     className: "btn btn-default",
                     "data-toggle": "tooltip",
                     title: "Shareable Link!",
+                    onClick: function onClick(e) {
+                      return e.preventDefault();
+                    },
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                       className: "fa fa-share"
                     })
@@ -6104,7 +6099,7 @@ var Items = /*#__PURE__*/function (_Component) {
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {})]
             })
-          }), this.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Row__WEBPACK_IMPORTED_MODULE_5__.default, {
+          }), this.props.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Row__WEBPACK_IMPORTED_MODULE_5__.default, {
             xs: 1,
             md: 4,
             className: "g-4",
@@ -6124,7 +6119,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-dot-circle-o"
                       })
-                    }), _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    }), _this10.props.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
@@ -6147,7 +6142,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.props.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
                         return _this10.downvoteItem(item.item_id);
@@ -6186,7 +6181,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     width: '24rem'
                   },
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Header, {
-                    children: [_this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    children: [_this10.props.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "warning",
                       onClick: function onClick(e) {
                         return _this10.pinItem(item.id);
@@ -6194,7 +6189,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-thumb-tack"
                       })
-                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), _this10.state.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), _this10.props.email === item.email ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                       className: "pull-right text-muted",
                       children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                         variant: "danger",
@@ -6217,7 +6212,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       children: item.title
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Text, {
                       children: item.description
-                    }), _this10.state.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
+                    }), _this10.props.loggedIn ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "primary",
                       onClick: function onClick(e) {
                         return _this10.downvoteItem(item.id);

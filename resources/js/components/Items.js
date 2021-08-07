@@ -16,15 +16,12 @@ class Items extends Component {
     super(props);
 
     this.state = {
-      email: this.props.email,
       unpinnedItems: [],
       errorMessage: null,
       itemAdded : this.props.itemAdded,
       recentlyViewedItems: [],
       pinnedItems: [],
-      searchText: '',
-      search: '',
-      loggedIn: this.props.loggedIn
+      searchText: ''
     };
 
     this.getAllItems=this.getAllItems.bind(this);
@@ -47,41 +44,40 @@ class Items extends Component {
       if (window.location.search.includes("term=")) {
         this.setState({ 
           searchText: window.location.search.substr(6),
-        })
+        }, () => {
+          this.getAllItems();
+        });
       }
       else {
         this.setState({ 
           searchText: '',
-        })
+        }, () => {
+          this.getAllItems();
+        });
       }
-      this.getAllItems();
     }
 
     if (window.location.search.includes("term=")) {
       this.setState({ 
         searchText: window.location.search.substr(6)
+      }, () => {
+        this.getAllItems();
       });
     }
-
-    this.getAllItems();
+    else {
+      this.getAllItems();
+    }
 
     //console.log('END didMount');
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps) {
     //console.log('Item Component did Update!');
-    if (this.props.email!==this.state.email || this.props.loggedIn != this.state.loggedIn) {
-      this.setState({ 
-        email: this.props.email,
-        loggedIn: this.props.loggedIn
-      })
+    if (this.props.email!==prevProps.email && this.props.loggedIn != prevProps.loggedIn) {
       this.getAllPinnedItems();
       this.getAllUnpinnedItems();
     }
-    if (prevState.itemAdded!==this.props.itemAdded) {
-      this.setState({ 
-        itemAdded : this.props.itemAdded
-      })
+    if (prevProps.itemAdded!==this.props.itemAdded) {
       this.getAllUnpinnedItems();
     }
     //console.log(this.state)
@@ -251,14 +247,14 @@ class Items extends Component {
                   return (
                     <Col key={item.id}>
                       <Card style={{ width: '24rem', marginRight: '4rem' }}>
-                        <Card.Header>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
+                        <Card.Header>{this.props.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                           <Link to={`/product?id=${item.id}`} >
                             <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture}/>
                           </Link>
                           <Card.Body>
                             <Card.Title>{item.title}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
-                            { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                            { this.props.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                           </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>
@@ -276,25 +272,25 @@ class Items extends Component {
                         </div>
                     </div>
                     <Link to={`/?term=${this.state.searchText}`} onClick={this.handleSubmit}><input type="submit" className="btn btn-default" value="Search"/></Link>
-                    <CopyToClipboard text={url}><button className="btn btn-default" data-toggle="tooltip" title="Shareable Link!"><i className="fa fa-share"></i></button></CopyToClipboard> 
-                    </form>
+                    <CopyToClipboard text={url}><button className="btn btn-default" data-toggle="tooltip" title="Shareable Link!" onClick={(e) => e.preventDefault()}><i className="fa fa-share"></i></button></CopyToClipboard>
+                    </form> 
                     <br/>
                 </div>
             </div>
-            {this.state.loggedIn ? 
+            {this.props.loggedIn ? 
               <Row xs={1} md={4} className="g-4">            
               {this.state.pinnedItems.map(item => {
                   return (
                     <Col key={item.id}>
                       <Card border="warning" style={{ width: '24rem' }}>
-                        <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.id)}><i className="fa fa-dot-circle-o"></i></Button>{this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
+                        <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.id)}><i className="fa fa-dot-circle-o"></i></Button>{this.props.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`} >
                           <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture}  />
                         </Link>
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>
                           <Card.Text>{item.description}</Card.Text>
-                          { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.item_id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                          { this.props.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.item_id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                         </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>
@@ -310,14 +306,14 @@ class Items extends Component {
                   return (
                     <Col key={item.id}>
                       <Card style={{ width: '24rem'}}>
-                        <Card.Header>{ this.state.loggedIn ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.state.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
+                        <Card.Header>{ this.props.loggedIn ? <Button variant="warning" onClick={ e =>this.pinItem(item.id)}><i className="fa fa-thumb-tack"></i></Button>:<span></span>}{ this.props.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
                         <Link to={`/product?id=${item.id}`}>
                           <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture} />
                         </Link>
                         <Card.Body>
                           <Card.Title>{item.title}</Card.Title>
                           <Card.Text>{item.description}</Card.Text>
-                          { this.state.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
+                          { this.props.loggedIn ? <Button variant="primary" onClick={ e =>this.downvoteItem(item.id)}><i className="fa fa-thumbs-down"></i></Button>:<span></span>}
                         </Card.Body>
                         <Card.Footer className="text-muted"><span><a href={`mailto:${item.email}`} data-toggle="tooltip" title="Email seller"><i className="fa fa-envelope"></i>{item.name}</a></span> <span className="pull-right">${(Math.round(item.price * 100) / 100).toFixed(2)}</span></Card.Footer>
                       </Card>

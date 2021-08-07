@@ -37,9 +37,9 @@ class Home extends Component  {
     }
   
     componentDidUpdate(prevState) {
-      if (prevState.loggedIn!==this.state.loggedIn) {
-        console.log('HomeComponentDidUpdate');
-      }
+      // if (prevState.loggedIn!==this.state.loggedIn) {
+      //   console.log('HomeComponentDidUpdate');
+      // }
     }
   
     isLoggedIn() {
