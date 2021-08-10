@@ -25,12 +25,14 @@ class IndexController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::guard('profile')->logout();
 
-        //return view('welcome');
+        $request->session()->invalidate();
 
-        return view('welcome', ['email' => null, 'loggedIn' => false]);
+        $request->session()->regenerateToken();
+
+        return view('welcome');
     }
 }

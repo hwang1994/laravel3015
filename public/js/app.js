@@ -5877,7 +5877,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('delete clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/delete?delete=' + id, {
-        withCredentials: true
+        withCredentials: true,
+        config: {
+          headers: {
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+          }
+        }
       });
       promise.then(function (response) {
         console.log('delete response', response.data);
@@ -5893,7 +5898,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('pin clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/pin?pin=' + id, {
-        withCredentials: true
+        withCredentials: true,
+        config: {
+          headers: {
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+          }
+        }
       });
       promise["catch"](function (error) {
         _this7.props.fail(Object.values(error.response.data.errors));
@@ -5908,7 +5918,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('unpin clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/unpin?unpin=' + id, {
-        withCredentials: true
+        withCredentials: true,
+        config: {
+          headers: {
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+          }
+        }
       });
       promise["catch"](function (error) {
         _this8.props.fail(Object.values(error.response.data.errors));
@@ -5938,7 +5953,12 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('downvote clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/downvote?downvote=' + id, {
-        withCredentials: true
+        withCredentials: true,
+        config: {
+          headers: {
+            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+          }
+        }
       });
       promise.then(function (response) {
         console.log('downvoted response', response.data);
@@ -6357,8 +6377,7 @@ var LoginModal = /*#__PURE__*/function (_Component) {
         withCredentials: true,
         config: {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            'Content-Type': 'multipart/form-data'
           }
         }
       }).then(function (response) {
@@ -6947,8 +6966,7 @@ var SignupModal = /*#__PURE__*/function (_Component) {
         withCredentials: true,
         config: {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            'Content-Type': 'multipart/form-data'
           }
         }
       }).then(function (response) {

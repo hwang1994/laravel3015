@@ -40,7 +40,7 @@ handleSubmit( event ) {
     url: LOGIN_URL,
     data: formData,
     withCredentials: true,
-    config: { headers: {'Content-Type': 'multipart/form-data', "X-CSRFToken": $('meta[name="csrf-token"]').attr('content') } }
+    config: { headers: {'Content-Type': 'multipart/form-data' } }
   })
   .then((response) => {
     console.log(response.data)

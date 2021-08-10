@@ -163,7 +163,7 @@ class Items extends Component {
 
   deleteItem(id) {
     //console.log('delete clicked');
-    const promise = axios.get(BASE_URL+'/delete?delete='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/delete?delete='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
     promise
       .then((response) => {
         console.log('delete response', response.data);
@@ -176,7 +176,7 @@ class Items extends Component {
 
   pinItem(id) {
     //console.log('pin clicked');
-    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
     promise
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
@@ -187,7 +187,7 @@ class Items extends Component {
 
   unpinItem(id) {
     //console.log('unpin clicked');
-    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
     promise
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
@@ -209,7 +209,7 @@ class Items extends Component {
 
   downvoteItem(id) {
     //console.log('downvote clicked');
-    const promise = axios.get(BASE_URL+'/downvote?downvote='+id, {withCredentials: true,});
+    const promise = axios.get(BASE_URL+'/downvote?downvote='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
     promise
       .then((response) => {
         console.log('downvoted response', response.data);
