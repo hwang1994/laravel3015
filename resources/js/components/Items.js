@@ -166,12 +166,16 @@ class Items extends Component {
     const promise = axios.get(BASE_URL+'/delete?delete='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
     promise
       .then((response) => {
-        console.log('delete response', response.data);
+        if (response.data=='Item deleted!') {
+          this.getAllItems();
+        }
+        else {
+          this.props.fail(response.data);
+        }
       })
       .catch((error) => {
         this.props.fail(Object.values(error.response.data.errors));
     });
-    this.getAllItems();
   }
 
   pinItem(id) {
