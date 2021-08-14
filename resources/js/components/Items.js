@@ -176,24 +176,38 @@ class Items extends Component {
 
   pinItem(id) {
     //console.log('pin clicked');
-    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
+    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true});
     promise
+    .then((response)=> {
+      if (response.data=='Item Pinned') {
+        this.getAllPinnedItems();
+        this.getAllUnpinnedItems();
+      }
+      else {
+        this.props.fail(response.data);
+      }
+    })
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
     });
-    this.getAllPinnedItems();
-    this.getAllUnpinnedItems();
   }
 
   unpinItem(id) {
     //console.log('unpin clicked');
-    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
+    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true});
     promise
+    .then((response)=> {
+      if (response.data=='Item unPinned') {
+        this.getAllPinnedItems();
+        this.getAllUnpinnedItems();
+      }
+      else {
+        this.props.fail(response.data);
+      }
+    })
     .catch((error) => {
       this.props.fail(Object.values(error.response.data.errors));
     });
-    this.getAllPinnedItems();
-    this.getAllUnpinnedItems();
   }
 
   handleChange(e) {
