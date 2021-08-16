@@ -74,8 +74,8 @@ class Items extends Component {
   componentDidUpdate(prevProps) {
     //console.log('Item Component did Update!');
     if (this.props.email!==prevProps.email && this.props.loggedIn != prevProps.loggedIn) {
-      this.getAllPinnedItems();
       this.getAllUnpinnedItems();
+      this.getAllPinnedItems();
     }
     if (prevProps.itemAdded!==this.props.itemAdded) {
       this.getAllUnpinnedItems();

@@ -38,13 +38,10 @@ class ProductController extends Controller
                     $cookie = Cookie::queue(Cookie::make('recently_viewed', $data, env('ITEM_LIFE_MINUTES')));
                 }
                 else if (!$exist && count($pieces)>=env('MAX_RECENTLY_VIEWED')) {
-                    $pieces[0]=$pieces[1];
-                    $pieces[1]=$pieces[2];
-                    $pieces[2]=$pieces[3];
-                    $pieces[3]=$itemId;
-                    $data=$pieces[0].'|'.$pieces[1].'|'.$pieces[2].'|'.$pieces[3];
+                    $data=$pieces[1].'|'.$pieces[2].'|'.$pieces[3].'|'.$itemId;
                     $cookie = Cookie::queue(Cookie::make('recently_viewed', $data, env('ITEM_LIFE_MINUTES')));
                 }
+                //var_dump($data);
             }
             else {
                 $cookie = Cookie::queue(Cookie::make('recently_viewed', $itemId, env('ITEM_LIFE_MINUTES')));

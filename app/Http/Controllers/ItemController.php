@@ -148,10 +148,19 @@ class ItemController extends Controller
             for($i = 0; $i < count($pieces); $i++){
                 if ($pieces[$i]==$itemId) {
                     array_splice($pieces, $i, 1);
-                    $data=$pieces[0].'|'.$pieces[1].'|'.$pieces[2];
-                    $cookie = Cookie::queue(Cookie::make('recently_viewed', $data, env('ITEM_LIFE_MINUTES')));
                 }
             }
+            $itemIds = '';
+            for($i = 0; $i < count($pieces); $i++){
+                if ($i==(count($pieces)-1)) {
+                    $itemIds .= $pieces[$i];
+                }
+                else {
+                    $itemIds .= $pieces[$i].'|';
+                }
+            }
+            //var_dump($itemIds);
+            $cookie = Cookie::queue(Cookie::make('recently_viewed', $itemIds, env('ITEM_LIFE_MINUTES')));
         }
         unlink(public_path('storage/pictures/'.$pictureFile));
     }

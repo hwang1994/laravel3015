@@ -5773,8 +5773,8 @@ var Items = /*#__PURE__*/function (_Component) {
     value: function componentDidUpdate(prevProps) {
       //console.log('Item Component did Update!');
       if (this.props.email !== prevProps.email && this.props.loggedIn != prevProps.loggedIn) {
-        this.getAllPinnedItems();
         this.getAllUnpinnedItems();
+        this.getAllPinnedItems();
       }
 
       if (prevProps.itemAdded !== this.props.itemAdded) {
@@ -5885,11 +5885,14 @@ var Items = /*#__PURE__*/function (_Component) {
         }
       });
       promise.then(function (response) {
-        console.log('delete response', response.data);
+        if (response.data == 'Item deleted!') {
+          _this6.getAllItems();
+        } else {
+          _this6.props.fail(response.data);
+        }
       })["catch"](function (error) {
         _this6.props.fail(Object.values(error.response.data.errors));
       });
-      this.getAllItems();
     }
   }, {
     key: "pinItem",
@@ -5898,18 +5901,19 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('pin clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/pin?pin=' + id, {
-        withCredentials: true,
-        config: {
-          headers: {
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
-          }
-        }
+        withCredentials: true
       });
-      promise["catch"](function (error) {
+      promise.then(function (response) {
+        if (response.data == 'Item Pinned') {
+          _this7.getAllPinnedItems();
+
+          _this7.getAllUnpinnedItems();
+        } else {
+          _this7.props.fail(response.data);
+        }
+      })["catch"](function (error) {
         _this7.props.fail(Object.values(error.response.data.errors));
       });
-      this.getAllPinnedItems();
-      this.getAllUnpinnedItems();
     }
   }, {
     key: "unpinItem",
@@ -5918,18 +5922,19 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('unpin clicked');
       var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/unpin?unpin=' + id, {
-        withCredentials: true,
-        config: {
-          headers: {
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
-          }
-        }
+        withCredentials: true
       });
-      promise["catch"](function (error) {
+      promise.then(function (response) {
+        if (response.data == 'Item unPinned') {
+          _this8.getAllPinnedItems();
+
+          _this8.getAllUnpinnedItems();
+        } else {
+          _this8.props.fail(response.data);
+        }
+      })["catch"](function (error) {
         _this8.props.fail(Object.values(error.response.data.errors));
       });
-      this.getAllPinnedItems();
-      this.getAllUnpinnedItems();
     }
   }, {
     key: "handleChange",
