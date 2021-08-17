@@ -180,37 +180,37 @@ class ItemController extends Controller
     {
         /** @var User $user */
         $user = Auth::guard('profile')->user();
-        //$items = Item::all()->where('created_at', '>', Carbon::now()->subHours(1)->toDateTimeString());
-        $items = Item::all();
         $unpinnedItems = [];
         if ($user!==null) {
             $userId = $user->getAttribute('id');
+            $items = DB::select( 
+                        DB::raw('SELECT `item`.`id`, `item`.`user_id`, `item`.`title`, `item`.`price`, `item`.`description`, `item`.`picture`, user.email AS `email`, user.name AS `name` 
+                                FROM `items` AS `item` 
+                                INNER JOIN `users` AS `user` ON `item`.`user_id` = `user`.`id` 
+                                -- WHERE `item`.`created_at` >= DATE_SUB(NOW(), INTERVAL 1 HOUR) AND
+                                WHERE ((NOT EXISTS (SELECT * FROM pins WHERE user_id=:userId AND item_id=`item`.`id`)))'), array('userId' => $userId, ));
+            //var_dump($items);
             if ($request->input('term') && trim($request->input('term'))!='') {
                 $request->validate([
                     'term'  => ['not_regex:/(?=.*[<>|])/']
                 ]);
                 $term = $request->input('term');
                 foreach ($items as $item) {
-                    if (!$this->isPinnedByUser($item['id'], $userId)) {
-                        if (preg_match('/'.$term.'/i', $item['title']) || preg_match('/'.$term.'/i', $item->user->name) || preg_match('/'.$term.'/i', $item['description']) || preg_match('/'.$term.'/i', $item['price']) ) {
-                            $item['email'] = $item->user->email;
-                            $item['name'] = $item->user->name;
-                            $unpinnedItems[] = $item;
-                        }
+                    if (preg_match('/'.$term.'/i', $item->title) || preg_match('/'.$term.'/i', $item->name) || preg_match('/'.$term.'/i', $item->description) || preg_match('/'.$term.'/i', $item->price) ) {
+                        $unpinnedItems[] = $item;
                     }
                 }
             }
             else {
                 foreach ($items as $item) {
-                    if (!$this->isPinnedByUser($item['id'], $userId)) {
-                        $item['email'] = $item->user->email;
-                        $item['name'] = $item->user->name;
-                        $unpinnedItems[] = $item;
-                    }
+                    $unpinnedItems[] = $item;
                 }
             }
+
         }
         else {
+            //$items = Item::all()->where('created_at', '>', Carbon::now()->subHours(1)->toDateTimeString());
+            $items = Item::all();
             if ($request->input('term') && trim($request->input('term'))!='') {               
                 $request->validate([
                     'term'  => ['not_regex:/(?=.*[<>|])/']
