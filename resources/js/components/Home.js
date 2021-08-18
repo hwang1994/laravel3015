@@ -71,10 +71,10 @@ class Home extends Component  {
   
     logOut() {
       axios.get(LOGOUT_URL, {withCredentials: true,});
-      this.isLoggedIn();
       this.setState({ 
         errorMessage: null
       })
+      location.reload();
     }
   
     newItem() {

@@ -5433,8 +5433,8 @@ var App = /*#__PURE__*/function (_Component) {
         withCredentials: true
       }).then(function (response) {
         console.log(response.data);
-        axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        axios.defaults.headers["delete"]['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        axios.defaults.headers.post['X-CSRF-TOKEN'] = response.data;
+        axios.defaults.headers["delete"]['X-CSRF-TOKEN'] = response.data;
       });
     }
   }, {
@@ -5597,10 +5597,10 @@ var Home = /*#__PURE__*/function (_Component) {
       axios__WEBPACK_IMPORTED_MODULE_1___default().get(LOGOUT_URL, {
         withCredentials: true
       });
-      this.isLoggedIn();
       this.setState({
         errorMessage: null
       });
+      location.reload(); // new csrf tokens needed to avoid csrf mismatch
     }
   }, {
     key: "newItem",
