@@ -34,6 +34,6 @@ Route::post('/signup', [LoginController::class, 'signup']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/newitem', [ItemController::class, 'createItem'])->middleware('auth:profile');
 Route::post('/pin', [ItemController::class, 'pinItem'])->middleware('auth:profile');
-Route::post('/unpin', [ItemController::class, 'unpinItem'])->middleware('auth:profile');
+Route::delete('/pin', [ItemController::class, 'unpinItem'])->middleware('auth:profile');
 Route::delete('/delete', [ItemController::class, 'deleteItemByRequest'])->middleware('auth:profile');
 Route::post('/downvote', [ItemController::class, 'downvoteItem'])->middleware('auth:profile');

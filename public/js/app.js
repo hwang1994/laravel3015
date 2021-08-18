@@ -5433,8 +5433,8 @@ var App = /*#__PURE__*/function (_Component) {
         withCredentials: true
       }).then(function (response) {
         console.log(response.data);
-        axios.defaults.headers.post['X-XSRF-TOKEN'] = response.data;
-        axios.defaults.headers["delete"]['X-XSRF-TOKEN'] = response.data;
+        axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        axios.defaults.headers["delete"]['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
       });
     }
   }, {
@@ -5982,8 +5982,8 @@ var Items = /*#__PURE__*/function (_Component) {
 
       //console.log('unpin clicked');
       axios__WEBPACK_IMPORTED_MODULE_1___default()({
-        method: 'post',
-        url: BASE_URL + '/unpin?unpin=' + id,
+        method: 'delete',
+        url: BASE_URL + '/pin?unpin=' + id,
         withCredentials: true,
         config: {
           headers: {
