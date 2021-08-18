@@ -142,7 +142,7 @@ class Items extends Component {
     promise
       .then((response) => {
         console.log('pinned response', response.data);
-        if (response.data!==undefined) {
+        if (Array.isArray(response.data)) {
           this.setState({ 
             pinnedItems: response.data,
             errorMessage:null
@@ -150,38 +150,48 @@ class Items extends Component {
         }
         else {
           this.setState({ 
-            errorMessage: 'no items found'
-          })
+            pinnedItems: [],
+            errorMessage:null
+          });
         }
       })
       .catch(() => {
         this.setState({ 
-          errorMessage: 'no items found'
-        })
+          pinnedItems: [],
+          errorMessage:null
+        });
     });
   }
 
   deleteItem(id) {
     //console.log('delete clicked');
-    const promise = axios.get(BASE_URL+'/delete?delete='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
-    promise
-      .then((response) => {
-        if (response.data=='Item deleted!') {
-          this.getAllItems();
-        }
-        else {
-          this.props.fail(response.data);
-        }
-      })
-      .catch((error) => {
-        this.props.fail(Object.values(error.response.data.errors));
+    axios({
+      method: 'delete',
+      url: BASE_URL+'/delete?delete='+id,
+      withCredentials: true,
+      config: { headers: { crossDomain: true} }
+    })
+    .then((response) => {
+      if (response.data=='Item deleted!') {
+        this.getAllItems();
+      }
+      else {
+        this.props.fail(response.data);
+      }
+    })
+    .catch((error) => {
+      this.props.fail(Object.values(error.response.data.errors));
     });
   }
 
   pinItem(id) {
     //console.log('pin clicked');
-    const promise = axios.get(BASE_URL+'/pin?pin='+id, {withCredentials: true});
-    promise
+    axios({
+      method: 'post',
+      url: BASE_URL+'/pin?pin='+id,
+      withCredentials: true,
+      config: { headers: { crossDomain: true} }
+    })
     .then((response)=> {
       if (response.data=='Item Pinned') {
         this.getAllPinnedItems();
@@ -198,8 +208,12 @@ class Items extends Component {
 
   unpinItem(id) {
     //console.log('unpin clicked');
-    const promise = axios.get(BASE_URL+'/unpin?unpin='+id, {withCredentials: true});
-    promise
+    axios({
+      method: 'post',
+      url: BASE_URL+'/unpin?unpin='+id,
+      withCredentials: true,
+      config: { headers: { crossDomain: true} }
+    })
     .then((response)=> {
       if (response.data=='Item unPinned') {
         this.getAllPinnedItems();
@@ -227,23 +241,27 @@ class Items extends Component {
 
   downvoteItem(id) {
     //console.log('downvote clicked');
-    const promise = axios.get(BASE_URL+'/downvote?downvote='+id, {withCredentials: true, config: { headers: {"X-CSRFToken": $('meta[name="csrf-token"]').attr('content')} } });
-    promise
-      .then((response) => {
-        console.log('downvoted response', response.data);
-        if (response.data=='Downvoted!') {
-          this.props.action();
-        }
-        else if (response.data=='Downvoted! Now Deleted to due too many downvotes') {
-          alert(response.data);
-          this.componentDidMount();
-        }
-        else if (response.data=='No downvoting more than once on same product!') {
-          this.props.fail(response.data);
-        }
-      })
-      .catch((error) => {
-        this.props.fail(Object.values(error.response.data.errors));
+    axios({
+      method: 'post',
+      url: BASE_URL+'/downvote?downvote='+id,
+      withCredentials: true,
+      config: { headers: { crossDomain: true} }
+    })
+    .then((response) => {
+      console.log('downvoted response', response.data);
+      if (response.data=='Downvoted!') {
+        this.props.action();
+      }
+      else if (response.data=='Downvoted! Now Deleted to due too many downvotes') {
+        alert(response.data);
+        this.componentDidMount();
+      }
+      else if (response.data=='No downvoting more than once on same product!') {
+        this.props.fail(response.data);
+      }
+    })
+    .catch((error) => {
+      this.props.fail(Object.values(error.response.data.errors));
     });
   }
 

@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
+    public function token(Request $request)
+    {
+        $token = $request->session()->token();
+
+        $token = csrf_token();
+        return response()->json($token);
+    }
+
     public function islogin()
     {
         $user = Auth::guard('profile')->user();
@@ -21,7 +29,7 @@ class IndexController extends Controller
             return response()->json(['status' => true, 'email' => $user->getAttribute('email')]);
         }
         else {
-            return response()->json(['Not logged in']);
+            return response()->json('Not logged in');
         }
     }
 

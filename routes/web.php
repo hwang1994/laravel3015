@@ -20,14 +20,11 @@ use App\Http\Controllers\ItemController;
 //     return view('welcome');
 // });
 
+Route::get('/token', [IndexController::class, 'token']);
 Route::get('/islogin', [IndexController::class, 'islogin']);
 Route::get('/logout', [IndexController::class, 'logout']);
 Route::get('/unpinned', [ItemController::class, 'unpinnedItems']);
 Route::get('/pinned', [ItemController::class, 'pinnedItems'])->middleware('auth:profile');
-Route::get('/pin', [ItemController::class, 'pinItem'])->middleware('auth:profile');
-Route::get('/unpin', [ItemController::class, 'unpinItem'])->middleware('auth:profile');
-Route::get('/delete', [ItemController::class, 'deleteItemByRequest'])->middleware('auth:profile');
-Route::get('/downvote', [ItemController::class, 'downvoteItem'])->middleware('auth:profile');
 Route::get('/recentlyviewed', [ItemController::class, 'recentlyViewed']);
 Route::get('/getitem', [ProductController::class, 'getItem']);
 
@@ -36,3 +33,7 @@ Route::view('{path?}', 'welcome')->name('home');
 Route::post('/signup', [LoginController::class, 'signup']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/newitem', [ItemController::class, 'createItem'])->middleware('auth:profile');
+Route::post('/pin', [ItemController::class, 'pinItem'])->middleware('auth:profile');
+Route::post('/unpin', [ItemController::class, 'unpinItem'])->middleware('auth:profile');
+Route::delete('/delete', [ItemController::class, 'deleteItemByRequest'])->middleware('auth:profile');
+Route::post('/downvote', [ItemController::class, 'downvoteItem'])->middleware('auth:profile');

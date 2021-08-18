@@ -5384,6 +5384,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Home */ "./resources/js/components/Home.js");
 /* harmony import */ var _ProductView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProductView */ "./resources/js/components/ProductView.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
@@ -5392,21 +5413,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.BrowserRouter, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Switch, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-        path: "/",
-        component: _Home__WEBPACK_IMPORTED_MODULE_2__.default,
-        exact: true
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-        path: "/product",
-        component: _ProductView__WEBPACK_IMPORTED_MODULE_3__.default,
-        exact: true
-      })]
-    })
-  });
-}
+var CSRF_TOKEN_URL = window.location.origin + '/token';
+
+var App = /*#__PURE__*/function (_Component) {
+  _inherits(App, _Component);
+
+  var _super = _createSuper(App);
+
+  function App() {
+    _classCallCheck(this, App);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      axios.get(CSRF_TOKEN_URL, {
+        withCredentials: true
+      }).then(function (response) {
+        console.log(response.data);
+        axios.defaults.headers.post['X-XSRF-TOKEN'] = response.data;
+        axios.defaults.headers["delete"]['X-XSRF-TOKEN'] = response.data;
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.BrowserRouter, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Switch, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
+            path: "/",
+            component: _Home__WEBPACK_IMPORTED_MODULE_2__.default,
+            exact: true
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
+            path: "/product",
+            component: _ProductView__WEBPACK_IMPORTED_MODULE_3__.default,
+            exact: true
+          })]
+        })
+      });
+    }
+  }]);
+
+  return App;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
@@ -5854,19 +5905,21 @@ var Items = /*#__PURE__*/function (_Component) {
       promise.then(function (response) {
         console.log('pinned response', response.data);
 
-        if (response.data !== undefined) {
+        if (Array.isArray(response.data)) {
           _this5.setState({
             pinnedItems: response.data,
             errorMessage: null
           });
         } else {
           _this5.setState({
-            errorMessage: 'no items found'
+            pinnedItems: [],
+            errorMessage: null
           });
         }
       })["catch"](function () {
         _this5.setState({
-          errorMessage: 'no items found'
+          pinnedItems: [],
+          errorMessage: null
         });
       });
     }
@@ -5876,15 +5929,16 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this6 = this;
 
       //console.log('delete clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/delete?delete=' + id, {
+      axios__WEBPACK_IMPORTED_MODULE_1___default()({
+        method: 'delete',
+        url: BASE_URL + '/delete?delete=' + id,
         withCredentials: true,
         config: {
           headers: {
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            crossDomain: true
           }
         }
-      });
-      promise.then(function (response) {
+      }).then(function (response) {
         if (response.data == 'Item deleted!') {
           _this6.getAllItems();
         } else {
@@ -5900,10 +5954,16 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this7 = this;
 
       //console.log('pin clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/pin?pin=' + id, {
-        withCredentials: true
-      });
-      promise.then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default()({
+        method: 'post',
+        url: BASE_URL + '/pin?pin=' + id,
+        withCredentials: true,
+        config: {
+          headers: {
+            crossDomain: true
+          }
+        }
+      }).then(function (response) {
         if (response.data == 'Item Pinned') {
           _this7.getAllPinnedItems();
 
@@ -5921,10 +5981,16 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this8 = this;
 
       //console.log('unpin clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/unpin?unpin=' + id, {
-        withCredentials: true
-      });
-      promise.then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default()({
+        method: 'post',
+        url: BASE_URL + '/unpin?unpin=' + id,
+        withCredentials: true,
+        config: {
+          headers: {
+            crossDomain: true
+          }
+        }
+      }).then(function (response) {
         if (response.data == 'Item unPinned') {
           _this8.getAllPinnedItems();
 
@@ -5957,15 +6023,16 @@ var Items = /*#__PURE__*/function (_Component) {
       var _this9 = this;
 
       //console.log('downvote clicked');
-      var promise = axios__WEBPACK_IMPORTED_MODULE_1___default().get(BASE_URL + '/downvote?downvote=' + id, {
+      axios__WEBPACK_IMPORTED_MODULE_1___default()({
+        method: 'post',
+        url: BASE_URL + '/downvote?downvote=' + id,
         withCredentials: true,
         config: {
           headers: {
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            crossDomain: true
           }
         }
-      });
-      promise.then(function (response) {
+      }).then(function (response) {
         console.log('downvoted response', response.data);
 
         if (response.data == 'Downvoted!') {
@@ -6586,8 +6653,7 @@ var NewItemModal = /*#__PURE__*/function (_Component) {
         withCredentials: true,
         config: {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            "X-CSRFToken": $('meta[name="csrf-token"]').attr('content')
+            'Content-Type': 'multipart/form-data'
           }
         }
       }).then(function (response) {
