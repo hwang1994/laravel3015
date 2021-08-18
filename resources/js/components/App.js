@@ -11,8 +11,8 @@ class App extends Component {
     axios.get(CSRF_TOKEN_URL, {withCredentials: true})
     .then((response) => {
       console.log(response.data);
-      axios.defaults.headers.post['X-XSRF-TOKEN'] = response.data;
-      axios.defaults.headers.delete['X-XSRF-TOKEN'] = response.data;
+      axios.defaults.headers.post['X-CSRF-TOKEN'] = response.data;
+      axios.defaults.headers.delete['X-CSRF-TOKEN'] = response.data;
     })
   }
 
