@@ -32,10 +32,10 @@ class LoginController extends Controller
         
         if ($user !== null && Hash::check($password, $user->password)) {
             Auth::guard('profile')->login($user, true);
-            return response()->json(['Logged In!']);
+            return response()->json('Logged In!');
         }
         else {
-            return response()->json(['Email not found or incorrect password!']);
+            return response()->json('Email not found or incorrect password!');
         }
     }
 
@@ -59,10 +59,10 @@ class LoginController extends Controller
             $user->password = Hash::make($allParams['password']);
             $user->save();
             Auth::guard('profile')->login($user, true);
-            return response()->json(['Signed Up!']);
+            return response()->json('Signed Up!');
         }
         else {
-            return response()->json(['Email is already signed up!']);
+            return response()->json('Email is already signed up!');
         }
     }
 

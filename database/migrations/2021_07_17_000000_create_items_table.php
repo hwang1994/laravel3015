@@ -21,6 +21,7 @@ class CreateItemsTable extends Migration
             $table->string('description');
             $table->string('picture');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

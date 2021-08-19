@@ -21,8 +21,8 @@ class ProductController extends Controller
     {
         $itemId = $request->input('id');
         $item = Item::where('id', $itemId)->first();
-        $item['email'] = $item->user->email;
-        $item['name'] = $item->user->name;
+        $item->email = $item->user->email;
+        $item->name = $item->user->name;
         if ($item!==null) {
             if ($request->hasCookie('recently_viewed')) {
                 $cookie = $request->cookie('recently_viewed');

@@ -42,7 +42,7 @@ class ItemController extends Controller
         $item->save();
 
 
-        return response()->json(['Item Uploaded']);
+        return response()->json('Item Uploaded');
     }
 
     public function pinItem(Request $request)
@@ -58,14 +58,14 @@ class ItemController extends Controller
                 $pin->user_id = $userId;
                 $pin->item_id = $itemId;
                 $pin->save();
-                return response()->json(['Item Pinned']);
+                return response()->json('Item Pinned');
             }   
             else {
-                return response()->json(['Item already pinned by user']);
+                return response()->json('Item already pinned by user');
             }
         }
         else {
-            return response()->json(['Item does not exist or user not logged in! Pin Failed']);
+            return response()->json('Item does not exist or user not logged in! Pin Failed');
         }
     }
 
@@ -78,14 +78,14 @@ class ItemController extends Controller
             $pin = Pin::where([['user_id','=',$userId],['item_id','=', $itemId]])->first();
             if ($pin !== null && $pin['user_id'] == $userId) {
                 $pin->delete();
-                return response()->json(['Item unPinned']);
+                return response()->json('Item unPinned');
             }
             else {
-                return response()->json(['Pinned Item does not exist! unpin Failed']);
+                return response()->json('Pinned Item does not exist! unpin Failed');
             }
         }
         else {
-            return response()->json(['User not logged in']);
+            return response()->json('User not logged in');
         }
     }
 
@@ -106,18 +106,18 @@ class ItemController extends Controller
                 if ($itemDownvotes >= env('MAX_DOWNVOTES')) {
                     $pictureFile = $item['picture'];
                     $this->deleteItemById($itemId, $pictureFile, $request);
-                    return response()->json(['Downvoted! Now Deleted to due too many downvotes']);
+                    return response()->json('Downvoted! Now Deleted to due too many downvotes');
                 }
                 else {
-                    return response()->json(['Downvoted!']);
+                    return response()->json('Downvoted!');
                 }
             }
             else {
-                return response()->json(['No downvoting more than once on same product!']);
+                return response()->json('No downvoting more than once on same product!');
             }
         }
         else {
-            return response()->json(['User not logged in or item does not exist']);
+            return response()->json('User not logged in or item does not exist');
         }
     }
 
@@ -128,19 +128,19 @@ class ItemController extends Controller
         $itemId = $request->input('delete');
         $item = Item::find($itemId);
         $pictureFile = $item['picture'];
-        if ($item!==null && $item['user_id']==$userId) {
+        if ($item!==null && $item->user_id==$userId) {
             $this->deleteItemById($itemId, $pictureFile, $request);
-            return response()->json(['Item deleted!']);
+            return response()->json('Item deleted!');
         }
         else {
-            return response()->json(['Item does not exist! Delete Failed']);
+            return response()->json('Item does not exist! Delete Failed');
         }
     }
 
     private function deleteItemById($itemId, $pictureFile, Request $request)
     {
-        Downvote::where('item_id', $itemId)->delete();
-        Pin::where('item_id', $itemId)->delete();              
+        // Downvote::where('item_id', $itemId)->delete();
+        // Pin::where('item_id', $itemId)->delete();              
         Item::where('id', $itemId)->delete();
         if ($request->hasCookie('recently_viewed')) {
             $cookie = $request->cookie('recently_viewed');
@@ -206,7 +206,6 @@ class ItemController extends Controller
                     $unpinnedItems[] = $item;
                 }
             }
-
         }
         else {
             //$items = Item::all()->where('created_at', '>', Carbon::now()->subHours(1)->toDateTimeString());
@@ -215,19 +214,20 @@ class ItemController extends Controller
                 $request->validate([
                     'term'  => ['not_regex:/(?=.*[<>|])/']
                 ]);
+                $filteredUnpinnedItems=[];
                 $term = $request->input('term');
                 foreach ($items as $item) {
                     if (preg_match('/'.$term.'/i', $item['title']) || preg_match('/'.$term.'/i', $item->user->name) || preg_match('/'.$term.'/i', $item['description']) || preg_match('/'.$term.'/i', $item['price']) ) {
-                        $item['email'] = $item->user->email;
-                        $item['name'] = $item->user->name;
+                        $item->email = $item->user->email;
+                        $item->name = $item->user->name;
                         $unpinnedItems[] = $item;
                     }
                 }
             }
             else {
                 foreach ($items as $item) {
-                    $item['email'] = $item->user->email;
-                    $item['name'] = $item->user->name;
+                    $item->email = $item->user->email;
+                    $item->name = $item->user->name;
                     $unpinnedItems[] = $item;
                 }
             }
@@ -237,12 +237,13 @@ class ItemController extends Controller
 
     public function pinnedItems(Request $request) 
     {
-        $pinnedItemByUser = [];
         /** @var User $user */
         $user = Auth::guard('profile')->user();
         if ($user!==null) {
-            $pins = Pin::all();
-            //$pins = Pin::all()->where('created_at', '>', Carbon::now()->subHours(1)->toDateTimeString())->where('user_id',$id);
+            $pinnedItems=[];
+            $userId = $user->getAttribute('id');
+            $pins = Pin::all()->where('user_id', $userId);
+            //$pins = Pin::all()->where(['created_at', '>', Carbon::now()->subHours(1)->toDateTimeString()], ['user_id','=',$userId]);
             if ($request->input('term') && trim($request->input('term'))!='') {
                 $request->validate([
                     'term'  => ['not_regex:/(?=.*[<>|])/']
@@ -250,35 +251,29 @@ class ItemController extends Controller
                 $term = $request->input('term');
                 foreach ($pins as $pin) {
                     if (preg_match('/'.$term.'/i', $pin->item->title) || preg_match('/'.$term.'/i', $pin->item->user->name) || preg_match('/'.$term.'/i', $pin->item->description) || preg_match('/'.$term.'/i', $pin->item->price) ) {
-                        if ($pin['user_id'] == $user->getAttribute('id')) {
-                            $pin['title'] = $pin->item->title;
-                            $pin['name'] = $pin->item->user->name;
-                            $pin['description'] = $pin->item->description;
-                            $pin['price'] = $pin->item->price;
-                            $pin['email'] = $pin->item->user->email;
-                            $pin['picture'] = $pin->item->picture;
-                            $pin['id'] = $pin->item_id;
-                            $pinnedItemByUser[]=$pin;
-                        }
+                        $pin->title = $pin->item->title;
+                        $pin->name = $pin->item->user->name;
+                        $pin->description = $pin->item->description;
+                        $pin->price = $pin->item->price;
+                        $pin->email = $pin->item->user->email;
+                        $pin->picture = $pin->item->picture;
+                        $pinnedItems[]=$pin;
                     }
                 }
             }
             else {
                 foreach ($pins as $pin) {
-                    if ($pin['user_id'] == $user->getAttribute('id')) {
-                        $pin['title'] = $pin->item->title;
-                        $pin['name'] = $pin->item->user->name;
-                        $pin['description'] = $pin->item->description;
-                        $pin['price'] = $pin->item->price;
-                        $pin['email'] = $pin->item->user->email;
-                        $pin['picture'] = $pin->item->picture;
-                        $pin['id'] = $pin->item_id;
-                        $pinnedItemByUser[]=$pin;
-                    }
+                    $pin->title = $pin->item->title;
+                    $pin->name = $pin->item->user->name;
+                    $pin->description = $pin->item->description;
+                    $pin->price = $pin->item->price;
+                    $pin->email = $pin->item->user->email;
+                    $pin->picture = $pin->item->picture;
+                    $pinnedItems[]=$pin;
                 }
-            }           
+            }
+            return response()->json($pinnedItems);           
         }
-        return response()->json($pinnedItemByUser);
     }
 
     public function recentlyViewed(Request $request) 
@@ -290,8 +285,8 @@ class ItemController extends Controller
             for($i = 0; $i < count($pieces); $i++){
                 $item = Item::find($pieces[$i]);
                 if ($item!==null) {
-                    $item['email'] = $item->user->email;
-                    $item['name'] = $item->user->name;
+                    $item->email = $item->user->email;
+                    $item->name = $item->user->name;
                     $recentlyViewedItems[]=$item; 
                 }
             }

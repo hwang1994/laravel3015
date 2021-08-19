@@ -5600,7 +5600,7 @@ var Home = /*#__PURE__*/function (_Component) {
       this.setState({
         errorMessage: null
       });
-      location.reload(); // new csrf tokens needed to avoid csrf mismatch
+      location.reload();
     }
   }, {
     key: "newItem",
@@ -6206,7 +6206,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
                       variant: "warning",
                       onClick: function onClick(e) {
-                        return _this10.unpinItem(item.id);
+                        return _this10.unpinItem(item.item_id);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                         className: "fa fa-dot-circle-o"
@@ -6224,7 +6224,7 @@ var Items = /*#__PURE__*/function (_Component) {
                       })]
                     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {})]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                    to: "/product?id=".concat(item.id),
+                    to: "/product?id=".concat(item.item_id),
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Card__WEBPACK_IMPORTED_MODULE_7__.default.Img, {
                       variant: "top",
                       src: BASE_URL + PHOTO_STORAGE + item.picture
@@ -6260,7 +6260,7 @@ var Items = /*#__PURE__*/function (_Component) {
                     })]
                   })]
                 })
-              }, item.id);
+              }, item.item_id);
             })
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_bootstrap_Row__WEBPACK_IMPORTED_MODULE_5__.default, {
             xs: 1,

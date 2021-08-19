@@ -18,6 +18,8 @@ class CreatePinsTable extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('item_id');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
         });
     }
 

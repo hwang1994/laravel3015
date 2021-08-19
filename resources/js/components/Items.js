@@ -317,10 +317,10 @@ class Items extends Component {
               <Row xs={1} md={4} className="g-4">            
               {this.state.pinnedItems.map(item => {
                   return (
-                    <Col key={item.id}>
+                    <Col key={item.item_id}>
                       <Card border="warning" style={{ width: '24rem' }}>
-                        <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.id)}><i className="fa fa-dot-circle-o"></i></Button>{this.props.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
-                        <Link to={`/product?id=${item.id}`} >
+                        <Card.Header><Button variant="warning" onClick={ e =>this.unpinItem(item.item_id)}><i className="fa fa-dot-circle-o"></i></Button>{this.props.email===item.email ? <span className="pull-right text-muted"> <Button variant="danger" onClick={ e =>this.deleteItem(item.item_id)}><i className="fa fa-trash"></i></Button></span>:<span></span>}</Card.Header>
+                        <Link to={`/product?id=${item.item_id}`} >
                           <Card.Img variant="top" src={BASE_URL+PHOTO_STORAGE+item.picture}  />
                         </Link>
                         <Card.Body>
