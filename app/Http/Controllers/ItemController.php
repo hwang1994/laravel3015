@@ -214,7 +214,6 @@ class ItemController extends Controller
                 $request->validate([
                     'term'  => ['not_regex:/(?=.*[<>|])/']
                 ]);
-                $filteredUnpinnedItems=[];
                 $term = $request->input('term');
                 foreach ($items as $item) {
                     if (preg_match('/'.$term.'/i', $item['title']) || preg_match('/'.$term.'/i', $item->user->name) || preg_match('/'.$term.'/i', $item['description']) || preg_match('/'.$term.'/i', $item['price']) ) {
