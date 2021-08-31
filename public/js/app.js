@@ -5931,7 +5931,7 @@ var Items = /*#__PURE__*/function (_Component) {
       //console.log('delete clicked');
       axios__WEBPACK_IMPORTED_MODULE_1___default()({
         method: 'delete',
-        url: BASE_URL + '/delete?delete=' + id,
+        url: BASE_URL + '/item?delete=' + id,
         withCredentials: true,
         config: {
           headers: {
@@ -6859,15 +6859,10 @@ var ProductView = /*#__PURE__*/function (_Component) {
           selectedProduct: response.data
         }); //console.log('selectedProduct', this.state.selectedProduct);
 
-      })["catch"](function () {}); //console.log('END ProductViewdidMount');
+      })["catch"](function (error) {
+        alert(error.ToString());
+      }); //console.log('END ProductViewdidMount');
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevState) {//console.log('ProductViewComponentDidUpdate');
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {}
   }, {
     key: "render",
     value: function render() {

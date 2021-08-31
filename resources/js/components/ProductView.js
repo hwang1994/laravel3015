@@ -31,17 +31,10 @@ class ProductView extends Component {
       })
       //console.log('selectedProduct', this.state.selectedProduct);
     })
-    .catch(() => {
+    .catch((error) => {
+      alert(error.ToString());
     });
     //console.log('END ProductViewdidMount');
-  }
-
-  componentDidUpdate(prevState) {
-    //console.log('ProductViewComponentDidUpdate');
-  }
-
-  componentWillUnmount() {
-    
   }
 
   render() {

@@ -98,17 +98,17 @@ class ItemController extends Controller
         if ($user !==null && $item!==null) {
             $downVoted = Downvote::where([['user_id','=',$userId],['item_id','=', $itemId]])->first();
             if ($downVoted === null) { //item not downvoted by user
-                $downVote = new Downvote();
-                $downVote->user_id = $userId;
-                $downVote->item_id = $itemId;
-                $downVote->save();
                 $itemDownvotes = Downvote::where('item_id', '=', $itemId)->count(); 
-                if ($itemDownvotes >= env('MAX_DOWNVOTES')) {
+                if ($itemDownvotes >= env('MAX_DOWNVOTES')-1) {
                     $pictureFile = $item['picture'];
                     $this->deleteItemById($itemId, $pictureFile, $request);
                     return response()->json('Downvoted! Now Deleted to due too many downvotes');
                 }
                 else {
+                    $downVote = new Downvote();
+                    $downVote->user_id = $userId;
+                    $downVote->item_id = $itemId;
+                    $downVote->save();
                     return response()->json('Downvoted!');
                 }
             }
